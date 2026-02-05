@@ -1,20 +1,7 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+The ARC AI Assistant (Beta) is onboarding and tutorial assistant for the ARC Testnet ecosystem.
 
-# Run and deploy your AI Studio app
+While many teams create dApps, new users often struggle to understand how to use them. The ARC  Assistant solves this problem by providing clear, step-by-step tutorials for ARC Testnet dApps, helping users connect wallets, interact securely, and troubleshoot common issues.
 
-This contains everything you need to run your app locally.
+The ARC Assistant helps users learn about and interact with ARC Testnet dApps through guided tutorials.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1JmGiztBWNDhDb4GYSOq4TcmdbkIWhThs
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+In the chat, type words like swap, faucet.. if you type an invalid term, a message will appear: "I'm having technical difficulties. Please try again in a few moments."
