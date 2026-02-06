@@ -1,11 +1,10 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Message, Tutorial } from './types';
 import { TUTORIALS } from './constants';
 import { generateAssistantResponse } from './services/gemini';
 import IconWrapper from './components/IconWrapper';
-import './index.css'
-// Fix for TypeScript error: Property 'ethereum' does not exist on type 'Window & typeof globalThis'
+
 declare global {
   interface Window {
     ethereum?: any;
@@ -16,7 +15,6 @@ const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1pyqTRBFYE_oiMikiH-oXl
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
 
-// Conteúdos detalhados de swap restaurados
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
 Link: https://www.curve.finance/dex/arc/swap
@@ -90,6 +88,8 @@ Confirm the transaction in your wallet.
 Final Notes: After confirmation, the message Transaction completed will be displayed.`
 };
 
+const MAX_GENERAL_QUESTIONS = 5;
+
 const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -101,6 +101,7 @@ const App: React.FC = () => {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [generalQuestionsCount, setGeneralQuestionsCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -114,18 +115,18 @@ const App: React.FC = () => {
   const findTutorialByKeyword = (text: string): Tutorial | { content: string } | undefined => {
     const lowerText = text.toLowerCase().trim();
     
-    // Otimização para busca rápida por número ou nome específico
     if (lowerText === '1' || lowerText.includes('curve')) return { content: SWAP_DETAILS.curve };
     if (lowerText === '2' || lowerText.includes('defi')) return { content: SWAP_DETAILS.defi };
     if (lowerText === '3' || lowerText.includes('axpha')) return { content: SWAP_DETAILS.axpha };
     if (lowerText === '4' || lowerText.includes('swaparc')) return { content: SWAP_DETAILS.swaparc };
 
-    // Busca geral por categorias
     if (lowerText.includes('faucet')) return TUTORIALS.find(t => t.id === 'faucet');
     if (lowerText.includes('wallet') || lowerText.includes('metamask')) return TUTORIALS.find(t => t.id === 'wallet');
     if (lowerText.includes('domain')) return TUTORIALS.find(t => t.id === 'domain');
     if (lowerText.includes('nft') || lowerText.includes('mint')) return TUTORIALS.find(t => t.id === 'nft');
     if (lowerText.includes('swap')) return TUTORIALS.find(t => t.id === 'swap');
+    if (lowerText.includes('bridge')) return TUTORIALS.find(t => t.id === 'bridge');
+    if (lowerText.includes('stake')) return TUTORIALS.find(t => t.id === 'stake');
     
     return undefined;
   };
@@ -170,8 +171,25 @@ const App: React.FC = () => {
       return;
     }
 
+    // Check limit for general questions
+    if (generalQuestionsCount >= MAX_GENERAL_QUESTIONS) {
+      setIsTyping(true);
+      setTimeout(() => {
+        const assistantMsg: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: "I'm sorry, you've reached the limit of 5 general questions for this session. Please use the menu on the left to access our official ARC Testnet tutorials.",
+          timestamp: Date.now()
+        };
+        setMessages(prev => [...prev, assistantMsg]);
+        setIsTyping(false);
+      }, 500);
+      return;
+    }
+
     setIsTyping(true);
     const responseText = await generateAssistantResponse(text);
+    setGeneralQuestionsCount(prev => prev + 1);
 
     const assistantMsg: Message = {
       id: (Date.now() + 1).toString(),
@@ -248,9 +266,7 @@ const App: React.FC = () => {
 
         <nav className="flex-1 space-y-6 overflow-y-auto pr-2">
           <div className="space-y-1">
-            {TUTORIALS
-              .filter(t => t.id !== 'bridge' && t.id !== 'stake')
-              .map((t) => (
+            {TUTORIALS.map((t) => (
               <button
                 key={t.id}
                 onClick={() => handleSend(`Tutorial for ${t.title}`, t.content)}
@@ -299,8 +315,15 @@ const App: React.FC = () => {
           <div className="flex items-center gap-3">
             <span className="font-black text-white tracking-widest uppercase text-xs font-mono">ARC IA v1.2</span>
           </div>
-          <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
-            <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Testnet</span>
+          <div className="flex items-center gap-4">
+             <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
+                <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">
+                  AI Limit: {generalQuestionsCount}/{MAX_GENERAL_QUESTIONS}
+                </span>
+            </div>
+            <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
+              <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Testnet</span>
+            </div>
           </div>
         </header>
 

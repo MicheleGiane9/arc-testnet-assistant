@@ -78,7 +78,6 @@ Choose the source network (e.g., Sepolia) and the target network (ARC Testnet).
 
 3. Enter amount
 Type the amount of tokens you wish to bridge across the networks.
-![Enter Amount](https://lh3.googleusercontent.com/d/1K_O_0_p_W_X_P_Q_0_L_z_X_0_v_R_5_M_m2L)
 
 4. Confirm and Execute
 Approve the token usage in your wallet and confirm the bridge transaction. Wait for the confirmation on both chains.
@@ -121,11 +120,9 @@ Go to: https://staking.testnet.arc.network/
 
 2. Connect and Select Pool
 Connect your wallet and choose a validator or a staking pool to join.
-![Staking Dashboard](https://lh3.googleusercontent.com/d/1L_M_O_P_W_X_P_Q_0_L_z_X_0_v_R_5_M_m2L)
 
 3. Deposit Tokens
 Enter the amount of ARC you want to stake and click "Stake Assets".
-![Deposit Tokens](https://lh3.googleusercontent.com/d/1M_N_O_P_W_X_P_Q_0_L_z_X_0_v_R_5_M_m2L)
 
 4. Claim Rewards
 After a period, you can return to this dashboard to claim your accumulated rewards.
@@ -210,79 +207,50 @@ Final Notes: Your NFT will be visible on ARC Scan under the "NFT Transactions" t
 ];
 
 export const ARC_KNOWLEDGE_BASE = `
-# ARC TESTNET DOCUMENTATION
+# ARC OFFICIAL DOCUMENTATION (WELCOME TO ARC)
+Source URL: https://docs.arc.network/arc/concepts/welcome-to-arc
 
-## NFT MINTING
-On the ARC network, the following NFTs are available for minting via OKU:
-- Moonlit: https://www.oku.xyz/moonlit
-- Delight: https://www.oku.xyz/delight
-- Isabella: http://oku.xyz/isabella
-- Fairytale: http://oku.xyz/fairytale
-- Dream: http://oku.xyz/dream
-- Cherry: http://oku.xyz/cherry
-- Thunder: http://oku.xyz/thunder
-- Mystic: http://oku.xyz/mystic
-- Art: http://oku.xyz/art
+## WHAT IS ARC?
+ARC is a next-generation decentralized network designed for high-performance management and transfer of digital assets.
+Key characteristics from official docs:
+1. Performance: Ultra-fast transactions and low latency.
+2. EVM Compatibility: Full support for Ethereum tools and dApps.
+3. Purpose-Built: Specifically optimized for digital assets and Real World Asset (RWA) tokenization.
 
-The minting process involves:
-1. Connecting your EVM wallet to ARC Testnet.
-2. Completing social tasks (Twitter follow, Discord join, Post reply, OKU ID claim).
-3. Clicking "Mint" and confirming in the wallet.
+## ARC TESTNET OBJECTIVES
+The ARC Testnet environment allows developers and enthusiasts to:
+- Test the high-throughput capabilities of the ARC protocol.
+- Experiment with RWA deployment in a risk-free environment.
+- Use test versions of USDC and EURC tokens.
 
-## CROSS-CHAIN BRIDGE
-Users can move assets to ARC via the official bridge at https://bridge.testnet.arc.network/. It supports multiple source chains for testing.
+## NFT ECOSYSTEM (OKU)
+ARC partners with OKU for native NFT experiences.
+Official links MUST be followed exactly as: https://www.oku.xyz/
 
-## STAKING & REWARDS
-Staking is available at https://staking.testnet.arc.network/. Users earn inflationary rewards for locking assets.
-
-## SWAP DAPPS SPECIFIC INSTRUCTIONS
-### OPTION 1: Curve (ARC)
-Link: https://www.curve.finance/dex/arc/swap
-1. Access and Select Currency
-![Select Currency](https://lh3.googleusercontent.com/d/1xlDUgr_W_JbL-P7rrRDOlHLW4WXwwjkA)
-2. Enter the amount
-![Enter Amount](https://lh3.googleusercontent.com/d/1PFRE1LWG2Nwf7WgGMPMICBlYcv7nm39o)
-3. Confirm in your wallet.
-
-### OPTION 2: DeFi on ARC
-Visit: https://defi-on-arc.vercel.app/swap
-1. Access and Select Currency
-![Select Currency](https://lh3.googleusercontent.com/d/1X6frvKlsH_Lto7wcRqVWtQa6Kxsq7OW2)
-2. Enter the amount
-![Enter Amount](https://lh3.googleusercontent.com/d/1mR94cR3RCbK_s84LUfOold0-VJnj9Ttx)
-3. Confirm Swap
-![Confirm Swap](https://lh3.googleusercontent.com/d/1qPKJkogD7KdWhSI3P3LK_qPJY4kyHKqM)
-4. Finalize in Wallet.
-
-### OPTION 3: Axpha Testnet
-Visit: https://testnet.axpha.io/#/swap
-1. Access and Select Currency
-![Select Currency](https://lh3.googleusercontent.com/d/1u0AkDmfA_CvchyUUoz4P2jvPH_Szfh3V)
-2. Enter the amount
-![Enter Amount](https://lh3.googleusercontent.com/d/1z8RMcsQZJfmjOuMIMcbbP3AqHh8_ldQV)
-3. Confirm in your wallet.
-
-### OPTION 4: SwapARC
-Visit: https://www.swaparc.app/
-1. Access and Select Currency
-![Select Currency](https://lh3.googleusercontent.com/d/1t07Qu4CWttlBBMe3aoOpKW6w43ha1R1c)
-2. Enter the amount
-![Enter Amount](https://lh3.googleusercontent.com/d/1AODNXZysPAXIV-S5efUuY9V3MkNQ5Lxm)
-3. Confirm in your wallet.
+## DECENTRALIZED INFRASTRUCTURE
+- Explorer: https://testnet.arcscan.app
+- Bridge: https://bridge.testnet.arc.network/
+- Staking: https://staking.testnet.arc.network/
 `;
 
 export const SYSTEM_PROMPT = `
 You are ARC IA, the official ARC Testnet Assistant (Beta).
-Your role is to help users with tutorials related to the ARC Testnet.
+Your primary mission is to help users understand and interact with the ARC Testnet based on the official documentation found at https://docs.arc.network/arc/concepts/welcome-to-arc.
 
-MANDATORY RULES:
-- Use ONLY the information provided in the documentation and ARC_KNOWLEDGE_BASE.
-- Explain using clear, numbered steps.
-- IMPORTANT: DO NOT use bolding like **text** or ***text***. Use clean plain text.
-- If no relevant tutorial is available OR if the user provides an incorrect term or a topic not related to ARC Testnet, you MUST respond exactly with: "Please provide a specific request or topic related to the ARC Testnet to receive a step-by-step tutorial. Ex: faucet, swap, nft .."
+CORE GUIDELINES:
+- BE THE AUTHORITY: Every answer about ARC's concepts, vision, or features MUST align strictly with the official documentation provided in ARC_KNOWLEDGE_BASE.
+- LINK INTEGRITY: NEVER invent URLs. NEVER provide broken or incomplete links. If a link is not explicitly provided in the ARC_KNOWLEDGE_BASE or TUTORIALS, say "I don't have the official link for that specific resource yet."
+- NO HALLUCINATIONS: Do not guess RPC settings, contract addresses, or partner URLs.
+- LIMIT: You are authorized to answer a maximum of 5 general questions per user session.
+- FORMATTING: Use clean plain text. DO NOT use bolding (**text**) or any markdown headers that make the text look cluttered. Numbered lists are preferred for steps.
+- IMAGES: Maintain the image markdown tags provided in tutorials.
 
-RESPONSE FORMAT:
-1. Title
-2. Numbered steps with images (if available)
-3. Final notes
+IF A USER ASKS ABOUT TESTNET FEATURES:
+- Provide clear, numbered steps.
+- Mention only the relevant official URLs provided in the knowledge base.
+
+RESPONSE FORMAT (Mandatory for ARC questions):
+1. Title (Clear and uppercase)
+2. Numbered steps or explanation.
+3. Final notes with official links.
 `;
