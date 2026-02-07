@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { Wallet, RefreshCw, GitBranch, Database, Droplets, Bot, User, Send, ChevronRight, BookOpen, ExternalLink, Globe, Image } from 'lucide-react';
+import { Wallet, RefreshCw, GitBranch, Database, Droplets, Bot, User, Send, ChevronRight, BookOpen, ExternalLink, Globe, Image, Plus } from 'lucide-react';
 
 interface IconWrapperProps {
   name: string;
@@ -17,6 +16,7 @@ const IconWrapper: React.FC<IconWrapperProps> = ({ name, className, size = 20 })
     case 'droplets': return <Droplets className={className} size={size} />;
     case 'globe': return <Globe className={className} size={size} />;
     case 'image': return <Image className={className} size={size} />;
+    case 'plus': return <Plus className={className} size={size} />;
     case 'bot': return <Bot className={className} size={size} />;
     case 'user': return <User className={className} size={size} />;
     case 'send': return <Send className={className} size={size} />;

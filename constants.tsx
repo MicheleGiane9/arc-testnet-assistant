@@ -62,29 +62,6 @@ If you see a limit message, it means the faucet limit for your address has been 
 Final Notes: Faucet requests are subject to cooldown periods. If the transaction fails, try again later.`
   },
   {
-    id: 'bridge',
-    title: 'Cross-Chain Bridge',
-    description: 'Transfer assets between different networks and ARC Testnet.',
-    icon: 'branch',
-    content: `CROSS-CHAIN BRIDGE TUTORIAL
-Learn how to move your assets from other testnets to the ARC Testnet.
-
-1. Access the Bridge
-Go to: https://bridge.testnet.arc.network/
-
-2. Select Source and Target
-Choose the source network (e.g., Sepolia) and the target network (ARC Testnet).
-![Bridge Interface](https://lh3.googleusercontent.com/d/1H57jE_pS_x9p8vXfP_Q0LzX0vR5M_m2L)
-
-3. Enter amount
-Type the amount of tokens you wish to bridge across the networks.
-
-4. Confirm and Execute
-Approve the token usage in your wallet and confirm the bridge transaction. Wait for the confirmation on both chains.
-
-Final Notes: Cross-chain transfers can take between 5 to 15 minutes depending on network congestion.`
-  },
-  {
     id: 'swap',
     title: 'Token Swap',
     description: 'Step-by-step guide to exchanging assets on the ARC DEX.',
@@ -106,28 +83,6 @@ Visit: https://testnet.axpha.io/#/swap
 Visit: https://www.swaparc.app/
 
 Please choose which dApp you want to use. Type the number or the name to receive specific instructions.`
-  },
-  {
-    id: 'stake',
-    title: 'Staking & Rewards',
-    description: 'Stake your ARC tokens to secure the network and earn rewards.',
-    icon: 'database',
-    content: `STAKING & REWARDS TUTORIAL
-Participate in network security by staking your ARC test tokens.
-
-1. Access the Staking Dashboard
-Go to: https://staking.testnet.arc.network/
-
-2. Connect and Select Pool
-Connect your wallet and choose a validator or a staking pool to join.
-
-3. Deposit Tokens
-Enter the amount of ARC you want to stake and click "Stake Assets".
-
-4. Claim Rewards
-After a period, you can return to this dashboard to claim your accumulated rewards.
-
-Final Notes: Staked tokens are subject to unbonding periods if you decide to withdraw.`
   },
   {
     id: 'domain',
@@ -203,6 +158,42 @@ Congratulations! Your NFT has been minted and added to your collection.
 ![Mint Success](https://lh3.googleusercontent.com/d/1dis2VtCDFe0Hor-f91B1CdH35cTmAaeV)
 
 Final Notes: Your NFT will be visible on ARC Scan under the "NFT Transactions" tab.`
+  },
+  {
+    id: 'create-nft',
+    title: 'Create NFT',
+    description: 'Create your own NFT collection on Arc Testnet via OmniHub.',
+    icon: 'plus',
+    content: `CREATE NFT COLLECTION
+Create an NFT collection using Arc Testnet in OmniHub.
+
+Access OmniHub:
+🔗 Link: https://omnihub.xyz/create/arc-testnet
+
+On the create nft screen, you must fill in the following fields as shown in the image.
+![Fields](https://lh3.googleusercontent.com/d/1fqTX0mJTOYT_3Js1u1vrlQuMTD_cz9_1)
+
+- The first field is Upload image, click the "+" icon.
+Upload your NFT image.
+- In the Collection Name field, enter the name of your collection.
+- Fill in the token symbol if you wish to choose your preferred symbol.
+- Set the price of mint
+- Collection description Write one simple sentence
+Example: Test NFT collection on Arc Testnet
+
+![Deploy Section](https://lh3.googleusercontent.com/d/1FrnJDXswyxvMr7bZF7AfUnCvDGPiiyBc)
+- Deploy
+
+Make sure the network is Arc Testnet
+
+Click Deploy
+
+Confirm the transaction in your wallet
+
+🎉 Your NFT collection is now created on Arc Testnet
+![Success](https://lh3.googleusercontent.com/d/1nKmG04PGu0lJpvYP5UajBLHcedZSW-uj)
+
+Final Notes: You can manage your collection directly on OmniHub after the deployment.`
   }
 ];
 
@@ -223,14 +214,13 @@ The ARC Testnet environment allows developers and enthusiasts to:
 - Experiment with RWA deployment in a risk-free environment.
 - Use test versions of USDC and EURC tokens.
 
-## NFT ECOSYSTEM (OKU)
-ARC partners with OKU for native NFT experiences.
-Official links MUST be followed exactly as: https://www.oku.xyz/
+## NFT ECOSYSTEM (OKU & OMNIHUB)
+ARC supports various NFT platforms:
+- OKU for minting existing collections: https://www.oku.xyz/
+- OmniHub for creating new NFT collections: https://omnihub.xyz/create/arc-testnet
 
 ## DECENTRALIZED INFRASTRUCTURE
 - Explorer: https://testnet.arcscan.app
-- Bridge: https://bridge.testnet.arc.network/
-- Staking: https://staking.testnet.arc.network/
 `;
 
 export const SYSTEM_PROMPT = `

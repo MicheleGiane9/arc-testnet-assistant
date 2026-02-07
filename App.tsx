@@ -123,10 +123,9 @@ const App: React.FC = () => {
     if (lowerText.includes('faucet')) return TUTORIALS.find(t => t.id === 'faucet');
     if (lowerText.includes('wallet') || lowerText.includes('metamask')) return TUTORIALS.find(t => t.id === 'wallet');
     if (lowerText.includes('domain')) return TUTORIALS.find(t => t.id === 'domain');
+    if (lowerText.includes('create nft') || lowerText.includes('omnihub')) return TUTORIALS.find(t => t.id === 'create-nft');
     if (lowerText.includes('nft') || lowerText.includes('mint')) return TUTORIALS.find(t => t.id === 'nft');
     if (lowerText.includes('swap')) return TUTORIALS.find(t => t.id === 'swap');
-    if (lowerText.includes('bridge')) return TUTORIALS.find(t => t.id === 'bridge');
-    if (lowerText.includes('stake')) return TUTORIALS.find(t => t.id === 'stake');
     
     return undefined;
   };
