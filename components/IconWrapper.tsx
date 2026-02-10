@@ -1,6 +1,5 @@
 
-import { Wallet, RefreshCw, GitBranch, Database, Droplets, Bot, User, Send, ChevronRight, BookOpen, ExternalLink, Globe, Image, Plus } from 'lucide-react';
-
+import { Wallet, RefreshCw, GitBranch, Database, Droplets, Bot, User, Send, ChevronRight, BookOpen, ExternalLink, Globe, Image, Plus, MessageCircle } from 'lucide-react';
 interface IconWrapperProps {
   name: string;
   className?: string;

@@ -14,6 +14,7 @@ declare global {
 const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1pyqTRBFYE_oiMikiH-oXl9cPHc-VFq7M";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
+const DISCORD_URL = "https://discord.gg/buildonarc";
 
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
@@ -303,6 +304,17 @@ const App: React.FC = () => {
                   <IconWrapper name="globe" size={16} />
                 </div>
                 <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">ARC Scan</h3>
+              </a>
+              <a
+                href={DISCORD_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border border-transparent hover:bg-slate-800/60 active:scale-95"
+              >
+                <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-indigo-600/20 text-slate-400 group-hover:text-indigo-400 transition-colors">
+                  <IconWrapper name="discord" size={16} />
+                </div>
+                <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">Discord</h3>
               </a>
             </div>
           </div>
