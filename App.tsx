@@ -14,6 +14,9 @@ declare global {
 const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1pyqTRBFYE_oiMikiH-oXl9cPHc-VFq7M";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
+// Convert Google Drive view link to embeddable preview link
+const WELCOME_VIDEO_URL = '/src/video/tutor.mp4';
+
 
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
@@ -103,6 +106,7 @@ const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [generalQuestionsCount, setGeneralQuestionsCount] = useState(0);
   const [zoomedImage, setZoomedImage] = useState<{ url: string; alt: string } | null>(null);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -114,12 +118,26 @@ const App: React.FC = () => {
   }, [messages, isTyping]);
 
   useEffect(() => {
+    // Check if user has seen the welcome modal before
+    const hasSeenWelcome = localStorage.getItem('arc_welcome_seen');
+    if (!hasSeenWelcome) {
+      setShowWelcomeModal(true);
+    }
+
     const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setZoomedImage(null);
+      if (event.key === 'Escape') {
+        setZoomedImage(null);
+        setShowWelcomeModal(false);
+      }
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
+
+  const closeWelcomeModal = () => {
+    localStorage.setItem('arc_welcome_seen', 'true');
+    setShowWelcomeModal(false);
+  };
 
   const findTutorialByKeyword = (text: string): Tutorial | { content: string } | undefined => {
     const lowerText = text.toLowerCase().trim();
@@ -440,6 +458,56 @@ const App: React.FC = () => {
           <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">Official ARC Protocol Beta Channel</p>
         </div>
       </main>
+
+      {/* Welcome Modal */}
+      {showWelcomeModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-500">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl" />
+          <div className="relative z-[210] max-w-2xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl shadow-[0_0_80px_rgba(79,70,229,0.3)] overflow-hidden flex flex-col animate-in zoom-in-95 duration-500">
+            {/* Header */}
+            <div className="p-6 border-b border-slate-800 flex items-center gap-4 bg-slate-900/50">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg border border-indigo-500">
+                <img src={ARC_LOGO_URL} alt="ARC" className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-white uppercase tracking-tight">Welcome to ARC Assistant</h2>
+                <p className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Beta Access Protocol</p>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="p-8 space-y-6 overflow-y-auto max-h-[80vh]">
+              <div className="space-y-4">
+                <p className="text-slate-200 text-base leading-relaxed font-medium">
+                  The ARC Assistant helps users learn about and interact with ARC Testnet dApps through guided tutorials.
+                </p>
+                <div className="p-4 rounded-2xl bg-slate-800/50 border border-slate-700/50">
+                  <p className="text-sm text-slate-300 leading-relaxed italic">
+                    Enter a term from the testnet, for example, <span className="text-indigo-400 font-bold">faucet</span>, and receive the tutorial. If you type a question for the AI, it will answer. There are <span className="text-white font-bold">5 questions</span> available per day.
+                  </p>
+                </div>
+              </div>
+
+              {/* Video Embed */}
+              <div className="aspect-video w-full rounded-2xl overflow-hidden border border-slate-800 bg-black shadow-2xl relative">
+                <iframe 
+                  src={WELCOME_VIDEO_URL} 
+                  className="absolute inset-0 w-full h-full" 
+                  allow="autoplay; encrypted-media" 
+                  allowFullScreen
+                ></iframe>
+              </div>
+              
+              <button 
+                onClick={closeWelcomeModal}
+                className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-[0.2em] shadow-xl transition-all active:scale-95 border border-indigo-400/20"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lightbox / Zoom Modal */}
       {zoomedImage && (
