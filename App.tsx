@@ -1,5 +1,6 @@
 
-import { useState, useRef, useEffect } from 'react';
+// Fix: Import React to resolve namespace errors for React.FC and other namespaced types
+import React, { useState, useRef, useEffect } from 'react';
 import { Message, Tutorial } from './types';
 import { TUTORIALS } from './constants';
 import { generateAssistantResponse } from './services/gemini';
@@ -14,9 +15,8 @@ declare global {
 const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1pyqTRBFYE_oiMikiH-oXl9cPHc-VFq7M";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
-// Convert Google Drive view link to embeddable preview link
-const WELCOME_VIDEO_URL = '/src/video/tutor.mp4';
-
+// Link de visualização direta otimizado para preview
+const WELCOME_VIDEO_URL = "https://drive.google.com/file/d/1qJUvu-WEHP7rDp0MeKPLsegdiIT9HAlI/preview";
 
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
@@ -118,7 +118,6 @@ const App: React.FC = () => {
   }, [messages, isTyping]);
 
   useEffect(() => {
-    // Check if user has seen the welcome modal before
     const hasSeenWelcome = localStorage.getItem('arc_welcome_seen');
     if (!hasSeenWelcome) {
       setShowWelcomeModal(true);
@@ -313,7 +312,6 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-transparent overflow-hidden font-sans relative">
-      {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-72 bg-slate-900/60 backdrop-blur-2xl border-r border-slate-800/60 p-5">
         <div className="flex items-center gap-3 mb-10">
           <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl shadow-lg flex items-center justify-center p-1.5">
@@ -383,7 +381,6 @@ const App: React.FC = () => {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 flex flex-col relative">
         <header className="flex items-center justify-between px-6 py-4 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
@@ -437,7 +434,6 @@ const App: React.FC = () => {
           <div ref={messagesEndRef} className="h-4" />
         </div>
 
-        {/* Input Area */}
         <div className="p-6 bg-slate-900/60 border-t border-slate-800/40 backdrop-blur-xl">
           <div className="max-w-4xl mx-auto relative group">
             <div className="absolute -inset-1 rounded-2xl blur opacity-10 group-focus-within:opacity-20 transition duration-500 bg-indigo-500"></div>
@@ -459,12 +455,10 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Welcome Modal */}
       {showWelcomeModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-500">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl" />
           <div className="relative z-[210] max-w-2xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl shadow-[0_0_80px_rgba(79,70,229,0.3)] overflow-hidden flex flex-col animate-in zoom-in-95 duration-500">
-            {/* Header */}
             <div className="p-6 border-b border-slate-800 flex items-center gap-4 bg-slate-900/50">
               <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg border border-indigo-500">
                 <img src={ARC_LOGO_URL} alt="ARC" className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
@@ -475,7 +469,6 @@ const App: React.FC = () => {
               </div>
             </div>
             
-            {/* Content */}
             <div className="p-8 space-y-6 overflow-y-auto max-h-[80vh]">
               <div className="space-y-4">
                 <p className="text-slate-200 text-base leading-relaxed font-medium">
@@ -488,13 +481,15 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Video Embed */}
               <div className="aspect-video w-full rounded-2xl overflow-hidden border border-slate-800 bg-black shadow-2xl relative">
+                {/* Embed otimizado para evitar redirecionamentos e melhorar qualidade */}
                 <iframe 
                   src={WELCOME_VIDEO_URL} 
-                  className="absolute inset-0 w-full h-full" 
-                  allow="autoplay; encrypted-media" 
+                  className="absolute inset-0 w-full h-full border-0 pointer-events-auto" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                   allowFullScreen
+                  title="ARC Welcome Video"
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                 ></iframe>
               </div>
               
@@ -509,7 +504,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Lightbox / Zoom Modal */}
       {zoomedImage && (
         <div 
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-300"
