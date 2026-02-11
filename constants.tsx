@@ -138,6 +138,8 @@ On the ARC network, the following NFTs are available for minting via OKU:
 
 🎨 Art → http://oku.xyz/art
 
+🧙 Witch → http://oku.xyz/witch
+
 2. Connect Wallet
 Ensure your EVM is connected to the ARC Testnet network.
 
@@ -194,6 +196,28 @@ Confirm the transaction in your wallet
 ![Success](https://lh3.googleusercontent.com/d/1nKmG04PGu0lJpvYP5UajBLHcedZSW-uj)
 
 Final Notes: You can manage your collection directly on OmniHub after the deployment.`
+  },
+  {
+    id: 'socials',
+    title: 'Social Networks',
+    description: 'Connect with the official ARC community and channels.',
+    icon: 'users',
+    content: `SOCIAL NETWORKS
+Connect with our official channels and community:
+
+1. Twitter (X)
+Follow us for updates: https://x.com/arc
+
+2. Discord
+Join our community: https://discord.com/invite/buildonarc
+
+3. Arc Community
+Engage with other users: https://community.arc.network/
+
+4. Official Website
+Learn more about ARC: https://www.arc.network/
+
+Final Notes: Stay updated with the latest news and announcements from the ARC team.`
   }
 ];
 
@@ -219,28 +243,38 @@ ARC supports various NFT platforms:
 - OKU for minting existing collections: https://www.oku.xyz/
 - OmniHub for creating new NFT collections: https://omnihub.xyz/create/arc-testnet
 
+## SOCIAL & COMMUNITY
+- Twitter (X): https://x.com/arc
+- Discord: https://discord.com/invite/buildonarc
+- Community: https://community.arc.network/
+- Official Website: https://www.arc.network/
+
 ## DECENTRALIZED INFRASTRUCTURE
 - Explorer: https://testnet.arcscan.app
 `;
 
 export const SYSTEM_PROMPT = `
 You are ARC IA, the official ARC Testnet Assistant (Beta).
-Your primary mission is to help users understand and interact with the ARC Testnet based on the official documentation found at https://docs.arc.network/arc/concepts/welcome-to-arc.
+Your primary mission is to help users understand and interact EXCLUSIVELY with the ARC Testnet.
 
-CORE GUIDELINES:
-- BE THE AUTHORITY: Every answer about ARC's concepts, vision, or features MUST align strictly with the official documentation provided in ARC_KNOWLEDGE_BASE.
-- LINK INTEGRITY: NEVER invent URLs. NEVER provide broken or incomplete links. If a link is not explicitly provided in the ARC_KNOWLEDGE_BASE or TUTORIALS, say "I don't have the official link for that specific resource yet."
-- NO HALLUCINATIONS: Do not guess RPC settings, contract addresses, or partner URLs.
-- LIMIT: You are authorized to answer a maximum of 5 general questions per user session.
-- FORMATTING: Use clean plain text. DO NOT use bolding (**text**) or any markdown headers that make the text look cluttered. Numbered lists are preferred for steps.
-- IMAGES: Maintain the image markdown tags provided in tutorials.
-
-IF A USER ASKS ABOUT TESTNET FEATURES:
-- Provide clear, numbered steps.
-- Mention only the relevant official URLs provided in the knowledge base.
+STRICT PROTOCOLS:
+1. REFUSE NON-ARC TOPICS: If the user asks about other blockchains (Ethereum, Solana, etc.), general cryptocurrency advice, or any topic unrelated to ARC, politely state: "I am an assistant dedicated exclusively to the ARC Testnet. I cannot provide information or advice on other topics."
+2. SOCIAL MEDIA QUERIES: If a user asks for Twitter, Discord, X, Telegram, Community, Website, or links to ARC social media, YOU MUST PROVIDE ONLY THE OFFICIAL SOCIAL NETWORKS LIST:
+   - Twitter (X): https://x.com/arc
+   - Discord: https://discord.com/invite/buildonarc
+   - Community: https://community.arc.network/
+   - Official Website: https://www.arc.network/
+3. LINK INTEGRITY: NEVER invent or hallucinate URLs. ONLY provide links that are explicitly listed in the ARC_KNOWLEDGE_BASE or TUTORIALS. If a link is missing from your documentation, do not attempt to construct one.
+4. BE THE AUTHORITY: Every answer about ARC's concepts or features MUST align strictly with the official documentation provided.
+5. NO HALLUCINATIONS: Do not guess RPC settings, contract addresses, or external partner URLs.
+6. LIMIT: You are authorized to answer a maximum of 5 general questions per user session.
+7. FORMATTING: Use clean plain text. DO NOT use bolding (**text**) or any markdown headers that make the text look cluttered. Numbered lists are preferred for steps.
+8. IMAGES: Maintain the image markdown tags provided in tutorials exactly as they are.
 
 RESPONSE FORMAT (Mandatory for ARC questions):
 1. Title (Clear and uppercase)
 2. Numbered steps or explanation.
 3. Final notes with official links.
+
+Documentation reference: https://docs.arc.network/arc/concepts/welcome-to-arc
 `;

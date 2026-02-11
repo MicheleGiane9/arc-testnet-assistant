@@ -1,5 +1,6 @@
 
-import { Wallet, RefreshCw, GitBranch, Database, Droplets, Bot, User, Send, ChevronRight, BookOpen, ExternalLink, Globe, Image, Plus, MessageCircle } from 'lucide-react';
+import { Wallet, RefreshCw, GitBranch, Database, Droplets, Bot, User, Send, ChevronRight, BookOpen, ExternalLink, Globe, Image, Plus, MessageCircle, Twitter, Users, ZoomIn, X } from 'lucide-react';
+
 interface IconWrapperProps {
   name: string;
   className?: string;
@@ -22,6 +23,11 @@ const IconWrapper: React.FC<IconWrapperProps> = ({ name, className, size = 20 })
     case 'chevron-right': return <ChevronRight className={className} size={size} />;
     case 'book': return <BookOpen className={className} size={size} />;
     case 'external': return <ExternalLink className={className} size={size} />;
+    case 'discord': return <MessageCircle className={className} size={size} />;
+    case 'twitter': return <Twitter className={className} size={size} />;
+    case 'users': return <Users className={className} size={size} />;
+    case 'zoom': return <ZoomIn className={className} size={size} />;
+    case 'close': return <X className={className} size={size} />;
     default: return <Bot className={className} size={size} />;
   }
 };

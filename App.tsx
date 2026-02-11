@@ -14,7 +14,6 @@ declare global {
 const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1pyqTRBFYE_oiMikiH-oXl9cPHc-VFq7M";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
-const DISCORD_URL = "https://discord.gg/buildonarc";
 
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
@@ -103,6 +102,7 @@ const App: React.FC = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [generalQuestionsCount, setGeneralQuestionsCount] = useState(0);
+  const [zoomedImage, setZoomedImage] = useState<{ url: string; alt: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -112,6 +112,14 @@ const App: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
+
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setZoomedImage(null);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
 
   const findTutorialByKeyword = (text: string): Tutorial | { content: string } | undefined => {
     const lowerText = text.toLowerCase().trim();
@@ -127,6 +135,20 @@ const App: React.FC = () => {
     if (lowerText.includes('create nft') || lowerText.includes('omnihub')) return TUTORIALS.find(t => t.id === 'create-nft');
     if (lowerText.includes('nft') || lowerText.includes('mint')) return TUTORIALS.find(t => t.id === 'nft');
     if (lowerText.includes('swap')) return TUTORIALS.find(t => t.id === 'swap');
+    
+    if (
+      lowerText.includes('social') || 
+      lowerText.includes('network') || 
+      lowerText.includes('twitter') || 
+      lowerText.includes('discord') ||
+      lowerText.includes('x.com') ||
+      lowerText.includes('community') ||
+      lowerText.includes('website') ||
+      lowerText.includes('site') ||
+      lowerText.includes('link') ||
+      lowerText.includes('redes') ||
+      lowerText.includes('rede')
+    ) return TUTORIALS.find(t => t.id === 'socials');
     
     return undefined;
   };
@@ -156,13 +178,13 @@ const App: React.FC = () => {
     }
 
     const matchedTutorial = findTutorialByKeyword(text);
-    if (matchedTutorial && matchedTutorial.content) {
+    if (matchedTutorial && (matchedTutorial as any).content) {
       setIsTyping(true);
       setTimeout(() => {
         const assistantMsg: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: matchedTutorial.content || '',
+          content: (matchedTutorial as any).content || '',
           timestamp: Date.now()
         };
         setMessages(prev => [...prev, assistantMsg]);
@@ -171,7 +193,6 @@ const App: React.FC = () => {
       return;
     }
 
-    // Check limit for general questions
     if (generalQuestionsCount >= MAX_GENERAL_QUESTIONS) {
       setIsTyping(true);
       setTimeout(() => {
@@ -229,11 +250,32 @@ const App: React.FC = () => {
     return parts.map((part, index) => {
       const imageMatch = part.match(/!\[(.*?)\]\((.*?)\)/);
       if (imageMatch) {
+        const altText = imageMatch[1];
+        const imageUrl = imageMatch[2];
         return (
-          <div key={`img-${index}`} className="my-6 rounded-xl overflow-hidden border border-slate-700 shadow-xl bg-slate-900/50 p-2">
-            <div className="relative rounded-lg overflow-hidden bg-white flex items-center justify-center">
-              <img src={imageMatch[2]} alt={imageMatch[1]} className="w-full h-auto object-contain max-h-[400px]" referrerPolicy="no-referrer" crossOrigin="anonymous" />
-            </div>
+          <div key={`img-${index}`} className="my-6">
+            <button 
+              onClick={() => setZoomedImage({ url: imageUrl, alt: altText })}
+              className="group relative rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-slate-900/50 p-2 block w-full transition-transform active:scale-[0.98]"
+            >
+              <div className="relative rounded-lg overflow-hidden bg-white flex items-center justify-center">
+                <img 
+                  src={imageUrl} 
+                  alt={altText} 
+                  className="w-full h-auto object-contain max-h-[300px] transition-transform duration-500 group-hover:scale-105" 
+                  referrerPolicy="no-referrer" 
+                  crossOrigin="anonymous" 
+                />
+                <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-300">
+                  <div className="bg-indigo-600 p-3 rounded-full shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                    <IconWrapper name="zoom" size={24} className="text-white" />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-2 text-[10px] text-slate-500 font-bold uppercase tracking-widest text-center group-hover:text-indigo-400 transition-colors">
+                Click to expand
+              </div>
+            </button>
           </div>
         );
       }
@@ -252,7 +294,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-transparent overflow-hidden font-sans">
+    <div className="flex h-screen bg-transparent overflow-hidden font-sans relative">
+      {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-72 bg-slate-900/60 backdrop-blur-2xl border-r border-slate-800/60 p-5">
         <div className="flex items-center gap-3 mb-10">
           <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl shadow-lg flex items-center justify-center p-1.5">
@@ -266,7 +309,7 @@ const App: React.FC = () => {
 
         <nav className="flex-1 space-y-6 overflow-y-auto pr-2">
           <div className="space-y-1">
-            {TUTORIALS.map((t) => (
+            {TUTORIALS.filter(t => t.id !== 'socials').map((t) => (
               <button
                 key={t.id}
                 onClick={() => handleSend(`Tutorial for ${t.title}`, t.content)}
@@ -283,6 +326,18 @@ const App: React.FC = () => {
           <div className="pt-6 mt-6 border-t border-slate-800/60">
             <p className="px-3 mb-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Official Resources</p>
             <div className="space-y-1">
+              <button
+                onClick={() => {
+                  const s = TUTORIALS.find(t => t.id === 'socials');
+                  if (s) handleSend(`Tutorial for ${s.title}`, s.content);
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border border-transparent hover:bg-slate-800/60 active:scale-95"
+              >
+                <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-indigo-600/20 text-slate-400 group-hover:text-indigo-400 transition-colors">
+                  <IconWrapper name="users" size={16} />
+                </div>
+                <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">Social Networks</h3>
+              </button>
               <a
                 href={DOCS_URL}
                 target="_blank"
@@ -305,22 +360,12 @@ const App: React.FC = () => {
                 </div>
                 <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">ARC Scan</h3>
               </a>
-              <a
-                href={DISCORD_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border border-transparent hover:bg-slate-800/60 active:scale-95"
-              >
-                <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-indigo-600/20 text-slate-400 group-hover:text-indigo-400 transition-colors">
-                  <IconWrapper name="discord" size={16} />
-                </div>
-                <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">Discord</h3>
-              </a>
             </div>
           </div>
         </nav>
       </aside>
 
+      {/* Main Content */}
       <main className="flex-1 flex flex-col relative">
         <header className="flex items-center justify-between px-6 py-4 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
@@ -374,6 +419,7 @@ const App: React.FC = () => {
           <div ref={messagesEndRef} className="h-4" />
         </div>
 
+        {/* Input Area */}
         <div className="p-6 bg-slate-900/60 border-t border-slate-800/40 backdrop-blur-xl">
           <div className="max-w-4xl mx-auto relative group">
             <div className="absolute -inset-1 rounded-2xl blur opacity-10 group-focus-within:opacity-20 transition duration-500 bg-indigo-500"></div>
@@ -394,6 +440,37 @@ const App: React.FC = () => {
           <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">Official ARC Protocol Beta Channel</p>
         </div>
       </main>
+
+      {/* Lightbox / Zoom Modal */}
+      {zoomedImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-300"
+          onClick={() => setZoomedImage(null)}
+        >
+          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md" />
+          <button 
+            className="absolute top-6 right-6 z-[110] p-3 rounded-full bg-slate-800 border border-slate-700 text-white hover:bg-slate-700 transition-colors active:scale-95"
+            onClick={(e) => { e.stopPropagation(); setZoomedImage(null); }}
+          >
+            <IconWrapper name="close" size={24} />
+          </button>
+          <div 
+            className="relative z-[105] max-w-7xl max-h-full rounded-2xl overflow-hidden border border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-white animate-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={zoomedImage.url} 
+              alt={zoomedImage.alt} 
+              className="w-full h-auto object-contain max-h-[90vh]"
+              referrerPolicy="no-referrer"
+              crossOrigin="anonymous"
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-slate-900/80 backdrop-blur-sm p-4 border-t border-slate-800">
+              <p className="text-white text-xs font-bold uppercase tracking-widest text-center">{zoomedImage.alt}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
