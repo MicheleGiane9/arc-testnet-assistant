@@ -91,6 +91,100 @@ Confirm the transaction in your wallet.
 Final Notes: After confirmation, the message Transaction completed will be displayed.`
 };
 
+const ONCHAIN_DETAILS = {
+  onchaingm: `a) ONCHAINGM
+It is a multi-chain platform that allows for simple and fast daily interactions across different blockchain networks.
+Access the ONCHAINGM website:
+https://onchaingm.com/
+Click on Connect Wallet in Arc Testnet
+Locate the Arc Testnet card.
+![Arc Testnet Card](https://lh3.googleusercontent.com/d/14eKRVJ-pEKem7MCyV9li0iGm3Hc-R052)
+
+- GM 
+
+Click on GM in Arc Testnet
+Your wallet will open automatically
+Click on Confirm / Approve transaction
+The image will remain like this until the transaction is approved in your wallet.
+![Pending Transaction](https://lh3.googleusercontent.com/d/18jV_jXPgrgYYm1YbXPPUEc4LtlDCOqJb)
+If everything goes correctly, the message will appear:
+🎉 GM Successful
+![Success Message](https://lh3.googleusercontent.com/d/1zrmeIZMXDFgfReeuIVvYv5HqMV96lgYF)
+
+
+-Deploy
+On the same screen, click deploy.
+![Deploy Step 1](https://lh3.googleusercontent.com/d/1fz6IuF9wR76XO8U_1CCBMZq7d6N_bajk)
+Deploy again and confirm the interaction with your wallet.
+![Deploy Step 2](https://lh3.googleusercontent.com/d/1Xj5E5abNZMqIn7PzKjsi5ef6KoWJZAfL)
+If everything went well, the following message will be displayed.
+Contract Deployed on Arc Testnet!
+Your contract deployment is confirmed!
+![Deploy Success](https://lh3.googleusercontent.com/d/15GbqGB7TjCuDIn1F6FWEFNdggotNVR-e)`,
+
+  watchoor: `b)Watchoor
+Watchoor is a Web3 platform focused on digital identity and on-chain activity.
+It allows users to interact with the blockchain through actions.
+
+Access the link https://watchoor.xyz/
+Search for the ARC network. 
+![ARC Network](https://lh3.googleusercontent.com/d/1WHj-EvVR_CZR77LbtohFCyX7SLR1GbnN)
+
+Click on "All". Note that there are 5 workflow progress actions.
+
+0/5 Completed
+Say GM
+Say GN
+Deploy NFT Collection
+Deploy ERC20 Token
+Deploy Accountant Contract, completing and confirming the interaction 5 times.
+
+![Workflow Progress](https://lh3.googleusercontent.com/d/15ugwknVTKdPg-sLYezso4odJC6VnBUYy)
+
+As you confirm the interactions, the order in which they were successfully completed will be highlighted in green.
+
+![Completed Actions](https://lh3.googleusercontent.com/d/15kn1QIfUcbL42l7mZ2EOH_PzIHSdOtWw)
+
+After completing all interactions, the message "Workflow complete" appears.
+
+![Workflow Complete](https://lh3.googleusercontent.com/d/1nMuVLNAi5Cf1WGodeiRIeIM-J1OsRL3o)`,
+
+  zkcodex: `c)Zkcodex.
+Is a Web3 platform that allows you to track, analyze, and interact with multiple blockchains in one place.
+
+Access the website https://zkcodex.com/onchain/gm
+
+Connect to the arc network and search for the arc network.
+
+![Search ARC](https://lh3.googleusercontent.com/d/19kv2bfUjfqvVAgn_Eda3gXVwn5w9Bj1y)
+
+Click on GM and confirm the interaction in your wallet.
+
+![Click GM](https://lh3.googleusercontent.com/d/1KmPNx0EnALXTwgEILxyFahM51zPkESXR)
+
+After confirmation, you will be shown that you have until 23:59 to complete this task again.
+![Task Completed](https://lh3.googleusercontent.com/d/1B0TeHn6qMEFeSNA5b1ZQSGvjHtYlrqBR)`,
+
+  onchaindaily: `d)Onchaindaily 
+
+It is a Web3 platform that allows you to generate on-chain activity in a simple way, with just one click.
+
+Access the link https://www.onchaindaily.io/arc
+
+On the ARC network, you can find these interactions;
+
+![Interactions](https://lh3.googleusercontent.com/d/1Un_ifrw-7t1nwJekMcHMGayEJ3eM2iP_)
+
+
+When you click deploy and confirm the interaction in your wallet, it will turn green because it was successfully deployed.
+![Deploy Green](https://lh3.googleusercontent.com/d/1339trjdngXXky44aJUkWINO0Ql9TIZaB)
+
+Follow the same step, clicking on mint,gm,deploy,gn
+
+Confirming the interactions one by one, in the end they all turned green.
+![All Green](https://lh3.googleusercontent.com/d/1qI05TwluRKOCRA0qKYFyivFwOVJX_aqu)`
+};
+
 const MAX_GENERAL_QUESTIONS = 5;
 
 const App: React.FC = () => {
@@ -106,7 +200,7 @@ const App: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [generalQuestionsCount, setGeneralQuestionsCount] = useState(0);
   const [zoomedImage, setZoomedImage] = useState<{ url: string; alt: string } | null>(null);
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -118,11 +212,6 @@ const App: React.FC = () => {
   }, [messages, isTyping]);
 
   useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem('arc_welcome_seen');
-    if (!hasSeenWelcome) {
-      setShowWelcomeModal(true);
-    }
-
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setZoomedImage(null);
@@ -134,8 +223,19 @@ const App: React.FC = () => {
   }, []);
 
   const closeWelcomeModal = () => {
-    localStorage.setItem('arc_welcome_seen', 'true');
     setShowWelcomeModal(false);
+  };
+
+  const clearChat = () => {
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: "Hello! I am ARC IA, your ARC Testnet Assistant (Beta). How can I help you today?",
+        timestamp: Date.now()
+      }
+    ]);
+    setGeneralQuestionsCount(0);
   };
 
   const findTutorialByKeyword = (text: string): Tutorial | { content: string } | undefined => {
@@ -146,12 +246,18 @@ const App: React.FC = () => {
     if (lowerText === '3' || lowerText.includes('axpha')) return { content: SWAP_DETAILS.axpha };
     if (lowerText === '4' || lowerText.includes('swaparc')) return { content: SWAP_DETAILS.swaparc };
 
+    if (lowerText === 'a' || lowerText.includes('onchaingm')) return { content: ONCHAIN_DETAILS.onchaingm };
+    if (lowerText === 'b' || lowerText.includes('watchoor')) return { content: ONCHAIN_DETAILS.watchoor };
+    if (lowerText === 'c' || lowerText.includes('zkcodex')) return { content: ONCHAIN_DETAILS.zkcodex };
+    if (lowerText === 'd' || lowerText.includes('onchaindaily')) return { content: ONCHAIN_DETAILS.onchaindaily };
+
     if (lowerText.includes('faucet')) return TUTORIALS.find(t => t.id === 'faucet');
     if (lowerText.includes('wallet') || lowerText.includes('metamask')) return TUTORIALS.find(t => t.id === 'wallet');
     if (lowerText.includes('domain')) return TUTORIALS.find(t => t.id === 'domain');
     if (lowerText.includes('create nft') || lowerText.includes('omnihub')) return TUTORIALS.find(t => t.id === 'create-nft');
     if (lowerText.includes('nft') || lowerText.includes('mint')) return TUTORIALS.find(t => t.id === 'nft');
     if (lowerText.includes('swap')) return TUTORIALS.find(t => t.id === 'swap');
+    if (lowerText.includes('gm') || lowerText.includes('gn') || lowerText.includes('onchaingm') || lowerText.includes('deploy')) return TUTORIALS.find(t => t.id === 'onchaingm');
     
     if (
       lowerText.includes('social') || 
@@ -263,6 +369,7 @@ const App: React.FC = () => {
   };
 
   const renderMessageContent = (content: string) => {
+    // Split by images first
     const parts = content.split(/(!\[.*?\]\(.*?\))/g);
     return parts.map((part, index) => {
       const imageMatch = part.match(/!\[(.*?)\]\((.*?)\)/);
@@ -297,15 +404,44 @@ const App: React.FC = () => {
         );
       }
 
-      return part.split('\n').map((line, i) => {
-        if (!line.trim()) return <div key={`${index}-${i}`} className="h-2" />;
-        const cleanLine = line.replace(/\*\*\*/g, '').replace(/\*\*/g, '').replace(/\*/g, '').trim();
-        const isHeader = line.startsWith('#') || (line.toUpperCase() === line.trim() && line.length > 3 && line.length < 50);
-        return (
-          <div key={`${index}-${i}`} className={isHeader ? 'font-bold text-base mt-6 mb-3 text-white border-l-4 border-indigo-500 pl-4 bg-indigo-500/10 py-2 rounded-r-xl uppercase tracking-tight' : 'mb-3 text-slate-200 text-[14px] leading-relaxed font-medium'}>
-            {renderTextWithLinks(cleanLine.replace(/^#+\s*/, ''))}
-          </div>
-        );
+      // Handle code blocks
+      const codeBlockParts = part.split(/(```[\s\S]*?```)/g);
+      return codeBlockParts.map((codePart, codeIndex) => {
+        const codeMatch = codePart.match(/```(?:(\w+)\n)?([\s\S]*?)```/);
+        if (codeMatch) {
+          const language = codeMatch[1] || 'text';
+          const code = codeMatch[2].trim();
+          return (
+            <div key={`code-${codeIndex}`} className="my-4 rounded-xl overflow-hidden border border-slate-700 bg-slate-950 shadow-inner">
+              <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{language}</span>
+                <button 
+                  onClick={() => navigator.clipboard.writeText(code)}
+                  className="text-slate-500 hover:text-white transition-colors"
+                  title="Copy code"
+                >
+                  <IconWrapper name="external" size={14} />
+                </button>
+              </div>
+              <pre className="p-4 overflow-x-auto text-[13px] font-mono text-indigo-300 leading-relaxed">
+                <code>{code}</code>
+              </pre>
+            </div>
+          );
+        }
+
+        return codePart.split('\n').map((line, i) => {
+          if (!line.trim()) return <div key={`${index}-${codeIndex}-${i}`} className="h-2" />;
+          
+          const cleanLine = line.replace(/\*\*\*/g, '').replace(/\*\*/g, '').replace(/\*/g, '').trim();
+          const isHeader = line.startsWith('#') || (line.toUpperCase() === line.trim() && line.length > 3 && line.length < 50 && !line.includes('HTTP'));
+          
+          return (
+            <div key={`${index}-${codeIndex}-${i}`} className={isHeader ? 'font-bold text-base mt-6 mb-3 text-white border-l-4 border-indigo-500 pl-4 bg-indigo-500/10 py-2 rounded-r-xl uppercase tracking-tight' : 'mb-3 text-slate-200 text-[14px] leading-relaxed font-medium'}>
+              {renderTextWithLinks(cleanLine.replace(/^#+\s*/, ''))}
+            </div>
+          );
+        });
       });
     });
   };
@@ -387,6 +523,13 @@ const App: React.FC = () => {
             <span className="font-black text-white tracking-widest uppercase text-xs font-mono">ARC IA v1.2</span>
           </div>
           <div className="flex items-center gap-4">
+             <button 
+                onClick={clearChat}
+                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/50"
+                title="Clear Chat"
+             >
+                <IconWrapper name="refresh" size={16} />
+             </button>
              <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
                 <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">
                   AI Limit: {generalQuestionsCount}/{MAX_GENERAL_QUESTIONS}
