@@ -140,6 +140,8 @@ On the ARC network, the following NFTs are available for minting via OKU:
 
 🧙 Witch → http://oku.xyz/witch
 
+🌅 Morning → https://www.oku.xyz/morning
+
 2. Connect Wallet
 Ensure your EVM is connected to the ARC Testnet network.
 
