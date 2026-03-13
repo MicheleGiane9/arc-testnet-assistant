@@ -84,7 +84,7 @@ export default function WalletMonitor({ connectedAddress }: WalletMonitorProps) 
 
     setLoading(true);
     try {
-      const res = await fetch("/monitor", {
+      const res = await fetch("https://arcassistant.up.railway.app/monitor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -110,7 +110,7 @@ export default function WalletMonitor({ connectedAddress }: WalletMonitorProps) 
   async function stopMonitoring() {
     setLoading(true);
     try {
-      const res = await fetch("/stop", { method: "POST" });
+      const res = await fetch("https://arcassistant.up.railway.app/stop", { method: "POST" });
       if (res.ok) {
         setIsMonitoring(false);
         alert("Monitoring stopped!");
