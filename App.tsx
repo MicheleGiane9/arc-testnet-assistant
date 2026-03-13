@@ -5,6 +5,7 @@ import { Message, Tutorial } from './types';
 import { TUTORIALS } from './constants';
 import { generateAssistantResponse } from './services/gemini';
 import IconWrapper from './components/IconWrapper';
+import WalletMonitor from './components/WalletMonitor';
 
 declare global {
   interface Window {
@@ -201,6 +202,8 @@ const App: React.FC = () => {
   const [generalQuestionsCount, setGeneralQuestionsCount] = useState(0);
   const [zoomedImage, setZoomedImage] = useState<{ url: string; alt: string } | null>(null);
   const [showWelcomeModal, setShowWelcomeModal] = useState(true);
+  const [activeTab, setActiveTab] = useState<'assistant' | 'monitor'>('assistant');
+  const [connectedAddress, setConnectedAddress] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -225,6 +228,51 @@ const App: React.FC = () => {
   const closeWelcomeModal = () => {
     setShowWelcomeModal(false);
   };
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts && accounts[0]) {
+          setConnectedAddress(accounts[0]);
+        }
+      } catch (error) {
+        console.error("Error connecting wallet:", error);
+      }
+    } else {
+      alert("Please install MetaMask or another EVM wallet.");
+    }
+  };
+
+  const disconnectWallet = () => {
+    setConnectedAddress(null);
+  };
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      if (window.ethereum) {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts && accounts[0]) {
+            setConnectedAddress(accounts[0]);
+          }
+        } catch (error) {
+          console.error("Error checking connection:", error);
+        }
+      }
+    };
+    checkConnection();
+
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts: string[]) => {
+        if (accounts && accounts[0]) {
+          setConnectedAddress(accounts[0]);
+        } else {
+          setConnectedAddress(null);
+        }
+      });
+    }
+  }, []);
 
   const clearChat = () => {
     setMessages([
@@ -461,18 +509,58 @@ const App: React.FC = () => {
 
         <nav className="flex-1 space-y-6 overflow-y-auto pr-2">
           <div className="space-y-1">
-            {TUTORIALS.filter(t => t.id !== 'socials').map((t) => (
-              <button
-                key={t.id}
-                onClick={() => handleSend(`Tutorial for ${t.title}`, t.content)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border border-transparent active:scale-95 hover:bg-slate-800/60"
-              >
-                <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-indigo-600/20 text-slate-400 group-hover:text-indigo-400 transition-colors">
-                  <IconWrapper name={t.icon} size={16} />
-                </div>
-                <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">{t.title}</h3>
-              </button>
-            ))}
+            <button
+              onClick={() => setActiveTab('assistant')}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border active:scale-95 ${
+                activeTab === 'assistant' 
+                  ? 'bg-indigo-600/20 border-indigo-500/40 text-white shadow-[0_0_20px_rgba(79,70,229,0.2)]' 
+                  : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-800/60'
+              }`}
+            >
+              <div className={`p-2 rounded-lg transition-colors ${
+                activeTab === 'assistant' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 group-hover:text-indigo-400'
+              }`}>
+                <IconWrapper name="bot" size={16} />
+              </div>
+              <h3 className="text-[12px] font-black uppercase tracking-tight">AI Assistant</h3>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('monitor')}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border active:scale-95 ${
+                activeTab === 'monitor' 
+                  ? 'bg-indigo-600/20 border-indigo-500/40 text-white shadow-[0_0_20px_rgba(79,70,229,0.2)]' 
+                  : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-800/60'
+              }`}
+            >
+              <div className={`p-2 rounded-lg transition-colors ${
+                activeTab === 'monitor' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 group-hover:text-indigo-400'
+              }`}>
+                <IconWrapper name="bell" size={16} />
+              </div>
+              <h3 className="text-[12px] font-black uppercase tracking-tight">Wallet Monitor</h3>
+            </button>
+          </div>
+
+          <div className="pt-6 border-t border-slate-800/60">
+            <p className="px-3 mb-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Tutorials</p>
+            <div className="space-y-1">
+              {TUTORIALS.filter(t => t.id !== 'socials').map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    setActiveTab('assistant');
+                    handleSend(`Tutorial for ${t.title}`, t.content);
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border border-transparent active:scale-95 hover:bg-slate-800/60"
+                >
+                  <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-indigo-600/20 text-slate-400 group-hover:text-indigo-400 transition-colors">
+                    <IconWrapper name={t.icon} size={16} />
+                  </div>
+                  <h3 className="text-[12px] font-black uppercase tracking-tight text-slate-400 group-hover:text-white">{t.title}</h3>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="pt-6 mt-6 border-t border-slate-800/60">
@@ -520,82 +608,119 @@ const App: React.FC = () => {
       <main className="flex-1 flex flex-col relative">
         <header className="flex items-center justify-between px-6 py-4 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
-            <span className="font-black text-white tracking-widest uppercase text-xs font-mono">ARC IA v1.2</span>
+            <span className="font-black text-white tracking-widest uppercase text-xs font-mono">
+              {activeTab === 'assistant' ? 'ARC IA v1.2' : 'Wallet Monitor v1.0'}
+            </span>
           </div>
           <div className="flex items-center gap-4">
-             <button 
-                onClick={clearChat}
-                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/50"
-                title="Clear Chat"
-             >
-                <IconWrapper name="refresh" size={16} />
-             </button>
-             <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
-                <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">
-                  AI Limit: {generalQuestionsCount}/{MAX_GENERAL_QUESTIONS}
-                </span>
-            </div>
+             <div className="flex items-center gap-2">
+               <button 
+                  onClick={connectedAddress ? undefined : connectWallet}
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-xl border transition-all ${
+                    connectedAddress 
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 cursor-default' 
+                      : 'bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 active:scale-95'
+                  }`}
+               >
+                  <IconWrapper name="wallet" size={14} />
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    {connectedAddress ? `${connectedAddress.slice(0, 6)}...${connectedAddress.slice(-4)}` : 'Connect Wallet'}
+                  </span>
+               </button>
+               {connectedAddress && (
+                 <button 
+                    onClick={disconnectWallet}
+                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors border border-slate-700/50 active:scale-95"
+                    title="Disconnect Wallet"
+                 >
+                    <IconWrapper name="close" size={14} />
+                 </button>
+               )}
+             </div>
+             {activeTab === 'assistant' && (
+               <>
+                 <button 
+                    onClick={clearChat}
+                    className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/50"
+                    title="Clear Chat"
+                 >
+                    <IconWrapper name="refresh" size={16} />
+                 </button>
+                 <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
+                    <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">
+                      AI Limit: {generalQuestionsCount}/{MAX_GENERAL_QUESTIONS}
+                    </span>
+                </div>
+               </>
+             )}
             <div className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50">
               <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Testnet</span>
             </div>
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-6 md:px-12 py-8 space-y-8 scroll-smooth">
-          {messages.map((m) => (
-            <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-3 duration-500`}>
-              <div className={`flex gap-4 max-w-[95%] md:max-w-[80%] ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border ${m.role === 'assistant' ? 'bg-slate-800 border-slate-700' : 'bg-indigo-600 border-indigo-500'}`}>
-                  {m.role === 'assistant' ? (
-                    <img src={ARC_LOGO_URL} alt="AI" className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
-                  ) : (
-                    <IconWrapper name="user" size={18} className="text-white" />
-                  )}
-                </div>
-                <div className={`p-5 rounded-2xl text-[14px] message-shadow transition-all ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-800/80 border border-slate-700/50 text-slate-100 rounded-tl-none backdrop-blur-md'}`}>
-                  {renderMessageContent(m.content)}
-                </div>
-              </div>
-            </div>
-          ))}
-          {isTyping && (
-            <div className="flex justify-start">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center p-2">
-                  <img src={ARC_LOGO_URL} alt="AI" className="w-full h-full object-contain animate-pulse" />
-                </div>
-                <div className="p-4 bg-slate-800/80 border border-slate-700/50 rounded-2xl rounded-tl-none flex items-center">
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce delay-150"></div>
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce delay-300"></div>
+        <div className={`flex-1 flex flex-col min-h-0 ${activeTab === 'assistant' ? '' : 'hidden'}`}>
+          <div className="flex-1 overflow-y-auto px-6 md:px-12 py-8 space-y-8 scroll-smooth">
+            {messages.map((m) => (
+              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-3 duration-500`}>
+                <div className={`flex gap-4 max-w-[95%] md:max-w-[80%] ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border ${m.role === 'assistant' ? 'bg-slate-800 border-slate-700' : 'bg-indigo-600 border-indigo-500'}`}>
+                    {m.role === 'assistant' ? (
+                      <img src={ARC_LOGO_URL} alt="AI" className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+                    ) : (
+                      <IconWrapper name="user" size={18} className="text-white" />
+                    )}
+                  </div>
+                  <div className={`p-5 rounded-2xl text-[14px] message-shadow transition-all ${m.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-800/80 border border-slate-700/50 text-slate-100 rounded-tl-none backdrop-blur-md'}`}>
+                    {renderMessageContent(m.content)}
                   </div>
                 </div>
               </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center p-2">
+                    <img src={ARC_LOGO_URL} alt="AI" className="w-full h-full object-contain animate-pulse" />
+                  </div>
+                  <div className="p-4 bg-slate-800/80 border border-slate-700/50 rounded-2xl rounded-tl-none flex items-center">
+                    <div className="flex gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce"></div>
+                      <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce delay-150"></div>
+                      <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce delay-300"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} className="h-4" />
+          </div>
+
+          <div className="p-6 bg-slate-900/60 border-t border-slate-800/40 backdrop-blur-xl">
+            <div className="max-w-4xl mx-auto relative group">
+              <div className="absolute -inset-1 rounded-2xl blur opacity-10 group-focus-within:opacity-20 transition duration-500 bg-indigo-500"></div>
+              <div className="relative flex items-center bg-slate-900 border rounded-2xl p-2.5 pr-4 shadow-2xl transition-all border-slate-700 focus-within:border-indigo-500/40">
+                <input 
+                  type="text" 
+                  value={input} 
+                  onChange={(e) => setInput(e.target.value)} 
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
+                  placeholder="Ask about ARC Testnet..."
+                  className="flex-1 bg-transparent border-none focus:ring-0 text-sm md:text-base px-5 py-2.5 placeholder-slate-600 text-white font-medium" 
+                />
+                <button onClick={() => handleSend()} disabled={!input.trim() || isTyping} className="p-3.5 rounded-xl transition-all active:scale-95 flex items-center justify-center border shadow-lg bg-indigo-600 hover:bg-indigo-500 border-indigo-400/20 text-white">
+                  <IconWrapper name="send" size={18} />
+                </button>
+              </div>
             </div>
-          )}
-          <div ref={messagesEndRef} className="h-4" />
+            <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">Official ARC Protocol Beta Channel</p>
+          </div>
         </div>
 
-        <div className="p-6 bg-slate-900/60 border-t border-slate-800/40 backdrop-blur-xl">
-          <div className="max-w-4xl mx-auto relative group">
-            <div className="absolute -inset-1 rounded-2xl blur opacity-10 group-focus-within:opacity-20 transition duration-500 bg-indigo-500"></div>
-            <div className="relative flex items-center bg-slate-900 border rounded-2xl p-2.5 pr-4 shadow-2xl transition-all border-slate-700 focus-within:border-indigo-500/40">
-              <input 
-                type="text" 
-                value={input} 
-                onChange={(e) => setInput(e.target.value)} 
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()} 
-                placeholder="Ask about ARC Testnet..."
-                className="flex-1 bg-transparent border-none focus:ring-0 text-sm md:text-base px-5 py-2.5 placeholder-slate-600 text-white font-medium" 
-              />
-              <button onClick={() => handleSend()} disabled={!input.trim() || isTyping} className="p-3.5 rounded-xl transition-all active:scale-95 flex items-center justify-center border shadow-lg bg-indigo-600 hover:bg-indigo-500 border-indigo-400/20 text-white">
-                <IconWrapper name="send" size={18} />
-              </button>
-            </div>
-          </div>
-          <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">Official ARC Protocol Beta Channel</p>
+        <div className={`flex-1 flex flex-col min-h-0 ${activeTab === 'monitor' ? '' : 'hidden'}`}>
+          <WalletMonitor connectedAddress={connectedAddress} />
         </div>
+
       </main>
 
       {showWelcomeModal && (
