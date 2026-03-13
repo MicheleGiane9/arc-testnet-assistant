@@ -12,6 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const PORT = process.env.PORT || 3000;
 
 const monitoredWallets: Record<string, string> = {};
 const lastTxMap: Record<string, string> = {};
