@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import axios from "axios";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -19,26 +20,16 @@ const lastTxMap: Record<string, string> = {};
 const monitors: Record<string, NodeJS.Timeout> = {};
 
 async function sendTelegramMessage(chatId: string, text: string) {
-
-  try {
-
+   try {
     const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
     await axios.post(url, {
       chat_id: chatId,
       text: text
     });
-
-  } catch (err) {
-
+ } catch (err) {
     console.log("Telegram send error");
-
-  }
-
-}
-
-async function checkWallet(wallet: string) {
-
+  }}async function checkWallet(wallet: string) {
   try {
 
     const res = await axios.get(
@@ -86,50 +77,31 @@ https://testnet.arcscan.app/tx/${latestTx.hash}
     console.log("New TX detected:", latestTx.hash);
 
   } catch (err) {
-
-    console.log("Arcscan API error");
-
-  }
-
-}
+    console.log("Arcscan API error");}}
 
 function startMonitoring(wallet: string) {
+ if (monitors[wallet]) {
+    console.log("Already monitoring:", wallet);   return; }
 
-  if (monitors[wallet]) {
-
-    console.log("Already monitoring:", wallet);
-    return;
-
-  }
-
-  const interval = setInterval(() => {
-
-    checkWallet(wallet);
-
+  const interval = setInterval(() => {   checkWallet(wallet);
   }, 10000);
-
-  monitors[wallet] = interval;
-
+ monitors[wallet] = interval;
 }
 
 async function startServer() {
 
   const app = express();
-  const PORT = process.env.PORT || 3000;
-
+app.use(cors());
   app.use(express.json());
 
+  // START MONITOR
   app.post("/monitor", async (req: Request, res: Response) => {
 
     const { walletAddress, telegramChatId } = req.body;
-
-    if (!walletAddress || !telegramChatId) {
-
+   if (!walletAddress || !telegramChatId) {
       return res.status(400).json({
         error: "Wallet and Telegram ID required"
-      });
-
-    }
+      });   }
 
     monitoredWallets[walletAddress] = telegramChatId;
 
@@ -153,6 +125,7 @@ Monitoring started`
 
   });
 
+  // STOP MONITOR
   app.post("/stop", (req: Request, res: Response) => {
 
     const { walletAddress } = req.body;
@@ -194,7 +167,7 @@ Monitoring started`
   app.listen(PORT, () => {
 
     console.log("Wallet monitor started");
-    console.log(`Server running http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 
   });
 
