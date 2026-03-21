@@ -1,26 +1,21 @@
-import express from "express";
+/*import express from "express";
 import type { Request, Response } from "express";
-import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
 import axios from "axios";
-import dotenv from "dotenv";
-import cors from "cors";
-
+import dotenv from "dotenv"; 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const PORT = process.env.PORT || 3000;
-
+const __dirname = path.dirname(__filename);const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const monitoredWallets: Record<string, string> = {};
 const lastTxMap: Record<string, string> = {};
 const monitors: Record<string, NodeJS.Timeout> = {};
 
 async function sendTelegramMessage(chatId: string, text: string) {
+
   try {
+
     const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
     await axios.post(url, {
@@ -29,11 +24,15 @@ async function sendTelegramMessage(chatId: string, text: string) {
     });
 
   } catch (err) {
+
     console.log("Telegram send error");
+
   }
+
 }
 
 async function checkWallet(wallet: string) {
+
   try {
 
     const res = await axios.get(
@@ -81,109 +80,91 @@ https://testnet.arcscan.app/tx/${latestTx.hash}
     console.log("New TX detected:", latestTx.hash);
 
   } catch (err) {
+
     console.log("Arcscan API error");
+
   }
+
 }
 
 function startMonitoring(wallet: string) {
 
   if (monitors[wallet]) {
+
     console.log("Already monitoring:", wallet);
     return;
+
   }
 
   const interval = setInterval(() => {
+
     checkWallet(wallet);
+
   }, 10000);
 
   monitors[wallet] = interval;
+
 }
 
 async function startServer() {
 
   const app = express();
+  const PORT = process.env.PORT || 3000;
 
-  app.use(cors());
   app.use(express.json());
-
-  /* ================= API ================= */
 
   app.post("/monitor", async (req: Request, res: Response) => {
 
-    try {
+    const { walletAddress, telegramChatId } = req.body;
 
-      const { walletAddress, telegramChatId } = req.body;
+    if (!walletAddress || !telegramChatId) {
 
-      if (!walletAddress || !telegramChatId) {
-        return res.status(400).json({
-          success: false,
-          error: "Wallet and Telegram ID required"
-        });
-      }
+      return res.status(400).json({
+        error: "Wallet and Telegram ID required"
+      });
 
-      monitoredWallets[walletAddress] = telegramChatId;
+    }
 
-      startMonitoring(walletAddress);
+    monitoredWallets[walletAddress] = telegramChatId;
 
-      await sendTelegramMessage(
-        telegramChatId,
+    startMonitoring(walletAddress);
+
+    await sendTelegramMessage(
+      telegramChatId,
 `🚀 ARC Wallet Monitor Activated
 
 Wallet:
 ${walletAddress}
 
 Monitoring started`
-      );
+    );
 
-      console.log("Monitoring:", walletAddress);
+    console.log("Monitoring:", walletAddress);
 
-      return res.json({
-        success: true,
-        message: "Monitoring started"
-      });
-
-    } catch (err) {
-
-      console.error("Monitor error:", err);
-
-      return res.status(500).json({
-        success: false,
-        error: "Server error"
-      });
-
-    }
+    res.json({
+      status: "success"
+    });
 
   });
 
   app.post("/stop", (req: Request, res: Response) => {
 
-    try {
+    const { walletAddress } = req.body;
 
-      const { walletAddress } = req.body;
+    if (monitors[walletAddress]) {
 
-      if (monitors[walletAddress]) {
-        clearInterval(monitors[walletAddress]);
-        delete monitors[walletAddress];
-      }
-
-      delete monitoredWallets[walletAddress];
-
-      return res.json({
-        success: true,
-        message: "Monitoring stopped"
-      });
-
-    } catch (err) {
-
-      return res.status(500).json({
-        success: false
-      });
+      clearInterval(monitors[walletAddress]);
+      delete monitors[walletAddress];
 
     }
 
-  });
+    delete monitoredWallets[walletAddress];
 
-  /* ================= FRONTEND ================= */
+    res.json({
+      status: "stopped"
+    });
+
+  });
 
   if (process.env.NODE_ENV !== "production") {
 
@@ -207,10 +188,137 @@ Monitoring started`
   app.listen(PORT, () => {
 
     console.log("Wallet monitor started");
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running http://localhost:${PORT}`);
 
   });
 
 }
 
-startServer();
+startServer();*/
+
+import express from "express";
+import cors from "cors";
+import type { Request, Response } from "express";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// ✅ CORS
+app.use(cors({
+  origin: [
+    "https://arc-testnet-assistant.vercel.app/",
+    "http://localhost:5173"
+  ]
+}));
+
+// ✅ JSON
+app.use(express.json());
+
+const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+
+const monitoredWallets: Record<string, string> = {};
+const lastTxMap: Record<string, string> = {};
+const monitors: Record<string, NodeJS.Timeout> = {};
+
+// ===== TELEGRAM =====
+async function sendTelegramMessage(chatId: string, text: string) {
+  try {
+    await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      chat_id: chatId,
+      text
+    });
+  } catch {
+    console.log("Telegram send error");
+  }
+}
+
+// ===== CHECK WALLET =====
+async function checkWallet(wallet: string) {
+  try {
+    const res = await axios.get(
+      `https://testnet.arcscan.app/api/v2/addresses/${wallet}/transactions`
+    );
+
+    const txs = res.data.items;
+    if (!txs || txs.length === 0) return;
+
+    const latestTx = txs[0];
+
+    if (lastTxMap[wallet] === latestTx.hash) return;
+
+    lastTxMap[wallet] = latestTx.hash;
+
+    const chatId = monitoredWallets[wallet];
+    if (!chatId) return;
+
+    const type =
+      latestTx.from.hash.toLowerCase() === wallet.toLowerCase()
+        ? "Outgoing"
+        : "Incoming";
+
+    await sendTelegramMessage(chatId, `
+🚨 ARC Transaction Detected
+
+Wallet: ${wallet}
+Type: ${type}
+Hash: ${latestTx.hash}
+https://testnet.arcscan.app/tx/${latestTx.hash}
+    `);
+
+  } catch {
+    console.log("Arcscan API error");
+  }
+}
+
+// ===== MONITOR =====
+function startMonitoring(wallet: string) {
+  if (monitors[wallet]) return;
+
+  checkWallet(wallet);
+
+  monitors[wallet] = setInterval(() => {
+    checkWallet(wallet);
+  }, 10000);
+}
+
+// ===== ROUTES =====
+app.get("/", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.post("/monitor", async (req: Request, res: Response) => {
+  const { walletAddress, telegramChatId } = req.body;
+
+  if (!walletAddress || !telegramChatId) {
+    return res.status(400).json({ error: "Missing data" });
+  }
+
+  monitoredWallets[walletAddress] = telegramChatId;
+  startMonitoring(walletAddress);
+
+  await sendTelegramMessage(telegramChatId, "✅ Monitoring started");
+
+  res.json({ success: true });
+});
+
+app.post("/stop", (req: Request, res: Response) => {
+  const { walletAddress } = req.body;
+
+  if (monitors[walletAddress]) {
+    clearInterval(monitors[walletAddress]);
+    delete monitors[walletAddress];
+  }
+
+  delete monitoredWallets[walletAddress];
+
+  res.json({ stopped: true });
+});
+
+// ✅ START
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
