@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ CORS (REMOVE / no final da URL)
+// ✅ CORS (sem / no final)
 app.use(cors({
   origin: [
     "https://arc-testnet-assistant.vercel.app",
@@ -21,7 +21,7 @@ app.use(express.json());
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
-// ✅ STORAGE (SEM TYPESCRIPT)
+// ✅ STORAGE (JS PURO)
 const monitoredWallets = {};
 const lastTxMap = {};
 const monitors = {};
@@ -29,12 +29,15 @@ const monitors = {};
 // ===== TELEGRAM =====
 async function sendTelegramMessage(chatId, text) {
   try {
-    await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-      chat_id: chatId,
-      text
-    });
-  } catch {
-    console.log("Telegram send error");
+    await axios.post(
+      `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
+      {
+        chat_id: chatId,
+        text
+      }
+    );
+  } catch (err) {
+    console.log("Telegram send error", err.message);
   }
 }
 
@@ -73,8 +76,8 @@ https://testnet.arcscan.app/tx/${latestTx.hash}
 
     console.log("New TX:", latestTx.hash);
 
-  } catch {
-    console.log("Arcscan API error");
+  } catch (err) {
+    console.log("Arcscan API error", err.message);
   }
 }
 
@@ -82,7 +85,6 @@ https://testnet.arcscan.app/tx/${latestTx.hash}
 function startMonitoring(wallet) {
   if (monitors[wallet]) return;
 
-  // roda imediatamente
   checkWallet(wallet);
 
   monitors[wallet] = setInterval(() => {
@@ -127,7 +129,5 @@ app.post("/stop", (req, res) => {
   res.json({ stopped: true });
 });
 
-// ✅ START (IMPORTANTE PRA RAILWAY)
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// ✅ START
+app.listen(PORT, "0.0.0.0", () => {console.log(`Server running on port ${PORT}`);});
