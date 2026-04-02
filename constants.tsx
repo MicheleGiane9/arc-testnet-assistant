@@ -142,6 +142,10 @@ On the ARC network, the following NFTs are available for minting via OKU:
 
 🌅 Morning → https://www.oku.xyz/morning
 
+🌌 Seiya → http://oku.xyz/seiya
+
+
+
 2. Connect Wallet
 Ensure your EVM is connected to the ARC Testnet network.
 
