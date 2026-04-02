@@ -1,8 +1,4 @@
 // Add ImportMetaEnv type declaration for Vite
-
-import dotenv from "dotenv";
-
-dotenv.config();
 interface ImportMetaEnv {
   readonly VITE_GEMINI_API_KEY: string;
 }
