@@ -31,8 +31,7 @@ Manually enter the following details exactly as provided by ARC:
 ![ARC Details](https://lh3.googleusercontent.com/d/1_Lq1UFc4oRf-VonYkD8NuTWbBxDF30_E)
 
 5. Save and confirm
-Click Save. If the message ARC Testnet was successfully added appears, the network has been added successfully. The ARC Network will now appear in your list of networks.
-![Confirmation](https://lh3.googleusercontent.com/d/1VBV_eMraHjaKTcTUqFbtzHMkU49pwjVJ)
+Click Save. If the message Arc Network Testnet was successfully added appears, the network has been added successfully. The ARC Network will now appear in your list of networks.
 
 Final Notes: Always ensure you are on the correct RPC to see your test balance and interact with dApps.`
   },
