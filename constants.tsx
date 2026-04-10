@@ -23,12 +23,12 @@ In the network list, scroll to the bottom. Click Add a custom network (or Add ne
 
 4. Fill in the ARC Network details
 Manually enter the following details exactly as provided by ARC:
-- Network name: Arc Testnet
+- Network name: Arc Network Testnet
 - New RPC URL: https://rpc.testnet.arc.network
 - Chain ID: 5042002
 - Currency symbol: USDC
 - Explorer URL: https://testnet.arcscan.app
-![ARC Details](https://lh3.googleusercontent.com/d/126Qi7IOQrfaOkAN7_BRtRs2U7vdfeKHd)
+![ARC Details](https://lh3.googleusercontent.com/d/1_Lq1UFc4oRf-VonYkD8NuTWbBxDF30_E)
 
 5. Save and confirm
 Click Save. If the message ARC Testnet was successfully added appears, the network has been added successfully. The ARC Network will now appear in your list of networks.
