@@ -143,6 +143,7 @@ On the ARC network, the following NFTs are available for minting via OKU:
 
 🌌 Seiya → http://oku.xyz/seiya
 
+🌸 Sienna → http://oku.xyz/sienna
 
 
 2. Connect Wallet
