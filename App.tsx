@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1YOW1sN-bgvofsI5LN21BT41q1v0iZjT_";
+const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1QI9bopnO2RatqOMuExfqmdSJCDygP09r";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
 // Link de visualização direta otimizado para preview
