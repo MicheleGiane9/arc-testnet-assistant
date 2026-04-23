@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1pyqTRBFYE_oiMikiH-oXl9cPHc-VFq7M";
+const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1YOW1sN-bgvofsI5LN21BT41q1v0iZjT_";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
 // Link de visualização direta otimizado para preview
@@ -525,7 +525,7 @@ const App: React.FC = () => {
               <h3 className="text-[12px] font-black uppercase tracking-tight">AI Assistant</h3>
             </button>
 
-            <button
+           <button
               onClick={() => setActiveTab('monitor')}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border active:scale-95 ${
                 activeTab === 'monitor' 
@@ -538,7 +538,7 @@ const App: React.FC = () => {
               }`}>
                 <IconWrapper name="bell" size={16} />
               </div>
-              <h3 className="text-[12px] font-black uppercase tracking-tight">Wallet Monitor</h3>
+            <h3 className="text-[12px] font-black uppercase tracking-tight">Wallet Monitor</h3>
             </button>
           </div>
 
