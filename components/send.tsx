@@ -80,11 +80,16 @@ export default function SendToken() {
   }, []);
 
   // 🔥 atualizar saldo
-  useEffect(() => {
-    if (!account) return;
-    fetchBalance(account).then(setBalance);
-  }, [account]);
+// auto refresh a cada 10s
+useEffect(() => {
+  if (!account) return;
 
+  const interval = setInterval(() => {
+    fetchBalance(account).then(setBalance);
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, [account]);
   // 🚀 enviar
   async function handleSend(e?: React.FormEvent) {
     if (e) e.preventDefault();
@@ -158,7 +163,7 @@ export default function SendToken() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6">
+    <div className="h-screen overflow-y-auto bg-slate-950 text-white flex flex-col items-center p-6">
 
       <div className="w-full max-w-2xl space-y-8">
 
