@@ -6,167 +6,136 @@ The ARC Assistant helps users learn about and interact with ARC Testnet dApps th
 
 In the chat, type words like swap, faucet.. if you type an invalid term, a message will appear: "I'm having technical difficulties. Please try again in a few moments."
 
-ARC Wallet Monitor — How It Works
+💸 SEND USDC
 
 📌 Overview
 
-The ARC Wallet Monitor is a real-time notification system that tracks blockchain wallet activity and sends instant alerts via Telegram whenever a new transaction occurs.
+The Send USDC feature allows users to transfer tokens on the ARC Testnet in a simple and secure way.
 
-It is designed to be simple, automated, and user friendly, requiring no manual setup of Telegram IDs.
+It provides a clean interface where users can:
 
-⚙️ How It Works
+-Select a predefined amount or enter a custom value
+
+-View their current wallet balance
+
+-Send tokens to another address
+
+-Receive instant transaction feedback
+
+
 1. 🔗 Connect Wallet
 
-The user connects their wallet through the interface.
-This wallet address will be monitored for incoming and outgoing transactions.
+The user connects their Web3 wallet (MetaMask, Rabby, etc).
+<img width="1121" height="620" alt="image" src="https://github.com/user-attachments/assets/8d720404-33a7-44e7-b970-29818b72c3e4" />
 
-2. 🤖 Connect Telegram (Automatic Linking)
+-The connected address is displayed
 
-When the user clicks "Connect Telegram":
+-The current balance is automatically fetched
 
-A unique sessionId is generated
+2. 💰 Balance Display
 
-The Telegram bot opens with a deep link:
+The app retrieves the wallet balance in real time:
 
-https://t.me/ArcTestnetMonitorBot?start=<sessionId>
+-Uses getBalance from the ARC network
 
-The user clicks Start inside the bot
+-Converts values using formatUnits
 
-Note: On a computer browser, if Telegram is the web version, the link may take a while to load. On a PC or mobile app, it opens automatically, and you can start the chat.
+-Displays a clean value (e.g. 12.4500 USDC)
 
-<img width="1358" height="609" alt="montior1" src="https://github.com/user-attachments/assets/dcec4a2c-1cc4-409c-854f-b4169b059cfc" />
-
-3. 🔄 Session Linking via Webhook
-
-Once the user starts the bot:
-
-Telegram sends a webhook event to the backend
-The backend extracts:
-chatId (user identifier)
-sessionId (from /start command)
-
-The system links them:
-
-sessionId → chatId
-
-4. 🔍 Automatic Detection (Frontend Polling)
-
-The frontend continuously checks:
-
-GET /telegram-status/:sessionId
-
-When the backend confirms the link:
-
-The chatId is automatically assigned
-No manual input is required
-Telegram is now connected ✅
-
-5. 🚀 Start Monitoring
-
-When monitoring starts:
-
-The backend stores:
-
-walletAddress → chatId
-A monitoring process begins using setInterval
-Every 10 seconds, the system checks for new transactions
-
-<img width="1040" height="531" alt="monitor 3" src="https://github.com/user-attachments/assets/4a5e613e-cb79-4f97-8d97-c9941a45a9db" />
+<img width="962" height="633" alt="image" src="https://github.com/user-attachments/assets/dca70ba2-2ad8-48a5-ae2f-7cfeea6adbca" />
 
 
+3. 🔢 Select Amount
 
-6. 📡 Blockchain Data Fetching
+Users can quickly choose an amount:
 
-The backend fetches data from the ARC Testnet explorer:
+1 USDC
+5 USDC
+10 USDC
 
-https://testnet.arcscan.app/api/v2/addresses/{wallet}/transactions
+Or enter a custom value:
+
+Custom amount input
+
+4. 📥 Enter Recipient
+
+The user inputs the destination wallet address:
+
+0x...
+
+<img width="900" height="612" alt="image" src="https://github.com/user-attachments/assets/4235aac3-0945-4a83-bcdb-a7bdc9264690" />
 
 
-7. 🧠 Transaction Detection Logic
+5. 🚀 Send Transaction
 
-To avoid duplicate alerts:
+When clicking Send:
 
-The system stores the last transaction hash
-Only sends a notification if a new transaction is detected
+-The app prepares a transaction using viem
+
+-Sends native USDC on ARC Testnet
+
+-Wallet opens for confirmation
 
 
+6. ⚡ Instant Feedback
 
-8. 📩 Telegram Notification
+After user approval:
 
-When a new transaction is found:
+-Transaction hash is immediately shown
 
-The system determines:
-Incoming or Outgoing
-Sends a formatted message via Telegram Bot API:
+-UI displays success message:
 
-🚨 ARC Transaction Detected
+🚀 Token Sent Successfully
 
-Wallet: <address>
-Type: Incoming / Outgoing
-Hash: <tx_hash>
+<img width="844" height="188" alt="image" src="https://github.com/user-attachments/assets/3af74e3e-9079-45e1-a9ae-11c661070eb9" />
+
+
+Explorer link is provided:
+
+https://testnet.arcscan.app/
 
 https://testnet.arcscan.app/tx/<tx_hash>
 
+7. 🔄 Balance Auto Update
 
+The system updates balance in two steps:
 
-9. 🛑 Stop Monitoring
+Instantly after sending (UX improvement)
 
-Users can stop monitoring at any time:
+After blockchain confirmation
 
-The interval process is cleared
-The wallet is removed from tracking
+This ensures the UI is always up-to-date.
 
+🎨 UI Features
 
-🧩 Architecture Summary
+Responsive layout (mobile + desktop)
 
-Frontend (React)
+Smooth animations on success
 
-Handles UI and user interaction
+Clean Web3-style interface
 
-Generates sessionId
+Scrollable page for better usability
 
-Polls backend for Telegram connection
+⚠️ Notes
 
-Backend (Node.js + Express)
+The ARC Testnet uses native USDC (18 decimals)
 
-Manages wallet monitoring
+No ERC-20 contract interaction is required
 
-Processes Telegram webhook
+Wallet must be connected to ARC Testnet (Chain ID: 5042002
 
-Sends notifications
+🚀 Summary
 
-External Services
+The Send USDC module delivers a smooth Web3 payment experience by combining:
 
-ARC Testnet Explorer API → transaction data
+Simplicity
 
-Telegram Bot API → message delivery
+Real-time feedback
 
+Clean UI/UX
 
+Reliable transaction handling
 
-
-💡 Key Features
-
-
-✅ Real-time transaction monitoring
-
-✅ Automatic Telegram connection (no Chat ID needed)
-
-✅ Duplicate transaction prevention
-
-✅ Lightweight and fast polling system
-
-✅ Simple and scalable architecture
-
-
-
-
-
-
-🚀 Conclusion
-
-
-
-The ARC Wallet Monitor provides a seamless way to track blockchain activity and receive instant notifications, combining Web3 data with real-time messaging in a clean and automated workflow.
 
 
 
