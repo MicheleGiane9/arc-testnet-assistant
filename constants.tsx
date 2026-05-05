@@ -1,5 +1,5 @@
 
-import { Tutorial } from './types';
+import { Tutorial } from './types.js';
 
 export const TUTORIALS: Tutorial[] = [
   {

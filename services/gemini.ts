@@ -10,7 +10,7 @@ declare global {
 }
 
 import { GoogleGenAI } from "@google/genai";
-import { SYSTEM_PROMPT } from "../constants";
+import { SYSTEM_PROMPT } from "../constants.js";
 
 export const generateAssistantResponse = async (
   userMessage: string

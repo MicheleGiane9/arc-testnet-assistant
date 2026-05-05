@@ -1,11 +1,13 @@
 
 // Fix: Import React to resolve namespace errors for React.FC and other namespaced types
 import React, { useState, useRef, useEffect } from 'react';
+
 import { Message, Tutorial } from './types';
 import { TUTORIALS } from './constants';
 import { generateAssistantResponse } from './services/gemini';
 import IconWrapper from './components/IconWrapper';
 import WalletMonitor from './components/WalletMonitor';
+import SendToken from './components/send';
 
 declare global {
   interface Window {
@@ -185,7 +187,7 @@ Follow the same step, clicking on mint,gm,deploy,gn
 Confirming the interactions one by one, in the end they all turned green.
 ![All Green](https://lh3.googleusercontent.com/d/1qI05TwluRKOCRA0qKYFyivFwOVJX_aqu)`
 };
-
+const SHOW_MONITOR = false;
 const MAX_GENERAL_QUESTIONS = 5;
 
 const App: React.FC = () => {
@@ -202,7 +204,8 @@ const App: React.FC = () => {
   const [generalQuestionsCount, setGeneralQuestionsCount] = useState(0);
   const [zoomedImage, setZoomedImage] = useState<{ url: string; alt: string } | null>(null);
   const [showWelcomeModal, setShowWelcomeModal] = useState(true);
-  const [activeTab, setActiveTab] = useState<'assistant' | 'monitor'>('assistant');
+  //const [activeTab, setActiveTab] = useState<'assistant' | 'monitor'>('assistant');
+  const [activeTab, setActiveTab] = useState<'assistant' | 'send'>('assistant');
   const [connectedAddress, setConnectedAddress] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -524,24 +527,25 @@ const App: React.FC = () => {
               </div>
               <h3 className="text-[12px] font-black uppercase tracking-tight">AI Assistant</h3>
             </button>
+<button onClick={() => setActiveTab('send')}
+  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border active:scale-95 ${activeTab === 'send'
+      ? 'bg-indigo-600/20 border-indigo-500/40 text-white shadow-[0_0_20px_rgba(79,70,229,0.2)]'
+      : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-800/60'
+  }`}
+>
+  <div className={`p-2 rounded-lg transition-colors ${activeTab === 'send' ? 'bg-indigo-600 text-white': 'bg-slate-800 text-slate-400 group-hover:text-indigo-400'
+    }`}
+  >
+    <IconWrapper name="send" size={16} />
+  </div>
 
-           <button
-              onClick={() => setActiveTab('monitor')}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border active:scale-95 ${
-                activeTab === 'monitor' 
-                  ? 'bg-indigo-600/20 border-indigo-500/40 text-white shadow-[0_0_20px_rgba(79,70,229,0.2)]' 
-                  : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-800/60'
-              }`}
-            >
-              <div className={`p-2 rounded-lg transition-colors ${
-                activeTab === 'monitor' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 group-hover:text-indigo-400'
-              }`}>
-                <IconWrapper name="bell" size={16} />
-              </div>
-            <h3 className="text-[12px] font-black uppercase tracking-tight">Wallet Monitor</h3>
-            </button>
+  <h3 className="text-[12px] font-black uppercase tracking-tight">
+    Send Token To Friends
+  </h3>
+</button>
+
           </div>
-
+          
           <div className="pt-6 border-t border-slate-800/60">
             <p className="px-3 mb-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Tutorials</p>
             <div className="space-y-1">
@@ -609,7 +613,8 @@ const App: React.FC = () => {
         <header className="flex items-center justify-between px-6 py-4 border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
             <span className="font-black text-white tracking-widest uppercase text-xs font-mono">
-              {activeTab === 'assistant' ? 'ARC IA v1.2' : 'Wallet Monitor v1.0'}
+              {activeTab === 'assistant' && 'ARC IA v1.2'}
+             {activeTab === 'send' && 'Send Tokens'}
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -716,10 +721,12 @@ const App: React.FC = () => {
             <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">Official ARC Protocol Beta Channel</p>
           </div>
         </div>
-
-        <div className={`flex-1 flex flex-col min-h-0 ${activeTab === 'monitor' ? '' : 'hidden'}`}>
-          <WalletMonitor connectedAddress={connectedAddress} />
-        </div>
+        <div className={`flex-1 flex flex-col min-h-0 ${activeTab === 'send' ? '' : 'hidden'}`}>
+  <SendToken 
+    connectedAddress={connectedAddress} 
+    balance={0}
+  />
+</div>
 
       </main>
 
