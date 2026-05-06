@@ -730,7 +730,7 @@ const App: React.FC = () => {
                 </button>
               </div>
             </div>
-            <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">Official ARC Protocol Beta Channel</p>
+            <p className="text-center mt-4 text-[9px] text-slate-600 uppercase tracking-[0.3em] font-black">This is an independent tool and is not officially affiliated with ARC</p>
           </div>
         </div>
         <div className={`flex-1 flex flex-col min-h-0 ${activeTab === 'send' ? '' : 'hidden'}`}>
