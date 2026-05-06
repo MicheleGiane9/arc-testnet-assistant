@@ -26,7 +26,9 @@ It provides a clean interface where users can:
 1. 🔗 Connect Wallet
 
 The user connects their Web3 wallet (MetaMask, Rabby, etc).
-<img width="1121" height="620" alt="image" src="https://github.com/user-attachments/assets/8d720404-33a7-44e7-b970-29818b72c3e4" />
+
+<img width="1076" height="619" alt="image" src="https://github.com/user-attachments/assets/63b67b64-dc1b-4bdc-ad10-11a8f021de54" />
+
 
 -The connected address is displayed
 
