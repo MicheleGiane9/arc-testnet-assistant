@@ -204,10 +204,13 @@ useEffect(() => {
               </button>
             ))}
           </div>
-
+          <p className="text-sm text-slate-400 mb-2">
+          Enter the quantity
+          </p>
           <input
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
+            
             placeholder="Custom amount"
             className="w-full p-4 bg-slate-800 rounded-xl text-white text-lg"
           />
