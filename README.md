@@ -1,5 +1,7 @@
 The ARC AI Assistant (Beta) is onboarding and tutorial assistant for the ARC Testnet ecosystem.
 
+Try it here:  https://arcportal.space/
+
 While many teams create dApps, new users often struggle to understand how to use them. The ARC  Assistant solves this problem by providing clear, step-by-step tutorials for ARC Testnet dApps, helping users connect wallets, interact securely, and troubleshoot common issues.
 
 The ARC Assistant helps users learn about and interact with ARC Testnet dApps through guided tutorials.
