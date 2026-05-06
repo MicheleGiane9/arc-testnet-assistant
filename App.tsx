@@ -19,7 +19,7 @@ const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/18o479XFCu0qsPzGzxvNPm
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
 // Link de visualização direta otimizado para preview
-const WELCOME_VIDEO_URL = "https://drive.google.com/file/d/1qJUvu-WEHP7rDp0MeKPLsegdiIT9HAlI/preview";
+const WELCOME_VIDEO_URL = "https://drive.google.com/file/d/1VUuMifzE-pXxQH0ZRuNstKMSIwtw2428/preview";
 
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
