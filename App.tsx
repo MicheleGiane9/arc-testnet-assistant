@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/1QI9bopnO2RatqOMuExfqmdSJCDygP09r";
+const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/18o479XFCu0qsPzGzxvNPmy8ixFhxQ-cl";
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
 // Link de visualização direta otimizado para preview
@@ -501,8 +501,12 @@ const App: React.FC = () => {
     <div className="flex h-screen bg-transparent overflow-hidden font-sans relative">
       <aside className="hidden md:flex flex-col w-72 bg-slate-900/60 backdrop-blur-2xl border-r border-slate-800/60 p-5">
         <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl shadow-lg flex items-center justify-center p-1.5">
-            <img src={ARC_LOGO_URL} alt="ARC" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+      <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center overflow-hidden">
+            <img 
+  src={ARC_LOGO_URL} 
+  alt="ARC" 
+  className="w-full h-full object-cover scale-110"
+/>
           </div>
           <div>
             <h1 className="text-xl font-black tracking-tight text-white leading-tight uppercase font-mono">ARC IA</h1>
@@ -671,7 +675,11 @@ const App: React.FC = () => {
                 <div className={`flex gap-4 max-w-[95%] md:max-w-[80%] ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg border ${m.role === 'assistant' ? 'bg-slate-800 border-slate-700' : 'bg-indigo-600 border-indigo-500'}`}>
                     {m.role === 'assistant' ? (
-                      <img src={ARC_LOGO_URL} alt="AI" className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+                      <img 
+  src={ARC_LOGO_URL} 
+  alt="ARC" 
+  className="w-full h-full object-cover scale-110"
+/>
                     ) : (
                       <IconWrapper name="user" size={18} className="text-white" />
                     )}
@@ -685,8 +693,12 @@ const App: React.FC = () => {
             {isTyping && (
               <div className="flex justify-start">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center p-2">
-                    <img src={ARC_LOGO_URL} alt="AI" className="w-full h-full object-contain animate-pulse" />
+                <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center overflow-hidden">
+                   <img 
+  src={ARC_LOGO_URL} 
+  alt="ARC" 
+  className="w-full h-full object-cover scale-110"
+/>
                   </div>
                   <div className="p-4 bg-slate-800/80 border border-slate-700/50 rounded-2xl rounded-tl-none flex items-center">
                     <div className="flex gap-1.5">
@@ -722,10 +734,7 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className={`flex-1 flex flex-col min-h-0 ${activeTab === 'send' ? '' : 'hidden'}`}>
-  <SendToken 
-    connectedAddress={connectedAddress} 
-    balance={0}
-  />
+  <SendToken />
 </div>
 
       </main>
@@ -735,8 +744,12 @@ const App: React.FC = () => {
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl" />
           <div className="relative z-[210] max-w-2xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl shadow-[0_0_80px_rgba(79,70,229,0.3)] overflow-hidden flex flex-col animate-in zoom-in-95 duration-500">
             <div className="p-6 border-b border-slate-800 flex items-center gap-4 bg-slate-900/50">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg border border-indigo-500">
-                <img src={ARC_LOGO_URL} alt="ARC" className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
+             <div className="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center overflow-hidden">
+             <img 
+  src={ARC_LOGO_URL} 
+  alt="ARC" 
+  className="w-full h-full object-cover scale-110"
+/>
               </div>
               <div>
                 <h2 className="text-xl font-black text-white uppercase tracking-tight">Welcome to ARC Assistant</h2>
