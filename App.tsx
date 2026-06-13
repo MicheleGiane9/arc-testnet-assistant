@@ -19,7 +19,7 @@ const ARC_LOGO_URL = "https://lh3.googleusercontent.com/d/18o479XFCu0qsPzGzxvNPm
 const DOCS_URL = "https://docs.arc.network/arc/";
 const EXPLORER_URL = "https://testnet.arcscan.app";
 // Link de visualização direta otimizado para preview
-const WELCOME_VIDEO_URL = "https://drive.google.com/file/d/1VUuMifzE-pXxQH0ZRuNstKMSIwtw2428/preview";
+const WELCOME_VIDEO_URL = "https://drive.google.com/file/d/1qJUvu-WEHP7rDp0MeKPLsegdiIT9HAlI/preview";
 
 const SWAP_DETAILS = {
   curve: `1. Curve (ARC)
@@ -531,25 +531,7 @@ const App: React.FC = () => {
               </div>
               <h3 className="text-[12px] font-black uppercase tracking-tight">AI Assistant</h3>
             </button>
-<button onClick={() => setActiveTab('send')}
-  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-left border active:scale-95 ${activeTab === 'send'
-      ? 'bg-indigo-600/20 border-indigo-500/40 text-white shadow-[0_0_20px_rgba(79,70,229,0.2)]'
-      : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-800/60'
-  }`}
->
-  <div className={`p-2 rounded-lg transition-colors ${activeTab === 'send' ? 'bg-indigo-600 text-white': 'bg-slate-800 text-slate-400 group-hover:text-indigo-400'
-    }`}
-  >
-    <IconWrapper name="send" size={16} />
-  </div>
-
-  <h3 className="text-[12px] font-black uppercase tracking-tight">
-    Send Token To Friends
-  </h3>
-</button>
-
           </div>
-          
           <div className="pt-6 border-t border-slate-800/60">
             <p className="px-3 mb-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Tutorials</p>
             <div className="space-y-1">
@@ -570,7 +552,6 @@ const App: React.FC = () => {
               ))}
             </div>
           </div>
-
           <div className="pt-6 mt-6 border-t border-slate-800/60">
             <p className="px-3 mb-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Official Resources</p>
             <div className="space-y-1">
