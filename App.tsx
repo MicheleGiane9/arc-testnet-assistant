@@ -185,7 +185,30 @@ When you click deploy and confirm the interaction in your wallet, it will turn g
 Follow the same step, clicking on mint,gm,deploy,gn
 
 Confirming the interactions one by one, in the end they all turned green.
-![All Green](https://lh3.googleusercontent.com/d/1qI05TwluRKOCRA0qKYFyivFwOVJX_aqu)`
+![All Green](https://lh3.googleusercontent.com/d/1qI05TwluRKOCRA0qKYFyivFwOVJX_aqu)`,
+
+
+chaingreets: `e)ChainGreets 
+
+Send your daily greetings across blockchain networks.
+
+Access the link https://chaingreets.xyz/
+
+On the ARC network, you can find these interactions;
+
+![Interactions](https://lh3.googleusercontent.com/d/1YpByTNOIHLyE3zFHkvIcP7v6IhjhfaeH)
+
+Complete 5-in-1
+Click on "5-in-1".
+To perform the following interactions: Say GM, Say GN, Deploy Contract, Deploy Token, and Deploy NFT.
+![Deploy Green](https://lh3.googleusercontent.com/d/1EyMaG7IYjN_ki8AMaT_wbl0hTxGNaVHn)
+
+Follow the same step.
+
+Confirming the interactions one by one, in the end they all turned green.
+
+![All Green](https://lh3.googleusercontent.com/d/1Ba38xx6wSsy5Z_YXB5v71yD8eS4clpYY)`
+
 };
 const SHOW_MONITOR = false;
 const MAX_GENERAL_QUESTIONS = 5;
@@ -301,6 +324,7 @@ const App: React.FC = () => {
     if (lowerText === 'b' || lowerText.includes('watchoor')) return { content: ONCHAIN_DETAILS.watchoor };
     if (lowerText === 'c' || lowerText.includes('zkcodex')) return { content: ONCHAIN_DETAILS.zkcodex };
     if (lowerText === 'd' || lowerText.includes('onchaindaily')) return { content: ONCHAIN_DETAILS.onchaindaily };
+    if (lowerText === 'e' || lowerText.includes('chaingreets')) return { content: ONCHAIN_DETAILS.chaingreets };
 
     if (lowerText.includes('faucet')) return TUTORIALS.find(t => t.id === 'faucet');
     if (lowerText.includes('wallet') || lowerText.includes('metamask')) return TUTORIALS.find(t => t.id === 'wallet');

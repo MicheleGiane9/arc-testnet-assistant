@@ -223,6 +223,9 @@ On-chain interactions and deployments.
 d) Onchaindaily
 Daily on-chain tasks and interactions.
 
+e) ChainGreets
+Send your daily greetings across blockchain networks.
+
 Please choose which dApp you want to use. Type the letter or the name to receive specific instructions.`
   },
   {
